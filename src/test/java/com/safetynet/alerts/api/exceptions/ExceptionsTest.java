@@ -82,14 +82,14 @@ public class ExceptionsTest {
     @DisplayName("Medical record already exist exception contain string already exist ")
     void medicalRecordAlreadyExistExceptionTest() {
         Exception exception = assertThrows(
-                MedicalRecordAlreadyExist.class,
+                MedicalRecordAlreadyExistException.class,
                 this::createNewMedicalRecord);
 
         assertTrue(exception.getMessage().contains("already exist"));
     }
 
-    void createNewMedicalRecord() throws MedicalRecordAlreadyExist{
-        throw new MedicalRecordAlreadyExist("first name" + "last name" + " already exist!");
+    void createNewMedicalRecord() throws MedicalRecordAlreadyExistException {
+        throw new MedicalRecordAlreadyExistException("first name" + "last name" + " already exist!");
     }
     }
 

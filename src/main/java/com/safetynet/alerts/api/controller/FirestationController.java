@@ -72,10 +72,10 @@ public class FirestationController {
     }
 
     @ApiOperation("Delete firestation by address")
-    @DeleteMapping("/firestation/address/{address}")
+    @DeleteMapping("/firestation/{address}")
     public void deleteFirestationByAddress(@PathVariable("address") String address) {
         logger.info("REST : Delete firestation address: {} ", address);
-        firestationService.deleteFirestationByAddress(address);
+        firestationService.deleteFirestation(address);
     }
 
 }

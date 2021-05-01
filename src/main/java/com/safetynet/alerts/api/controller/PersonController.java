@@ -90,7 +90,7 @@ public class PersonController {
             return ResponseEntity.ok(personToUpdate);
         } catch (PersonNotFoundException e) {
             logger.error("REST : Trying to update non existing person");
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

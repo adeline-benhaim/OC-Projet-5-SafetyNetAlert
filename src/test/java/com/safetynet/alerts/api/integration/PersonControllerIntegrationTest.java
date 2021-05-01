@@ -1,35 +1,36 @@
-package com.safetynet.alerts.api.controller;
+package com.safetynet.alerts.api.integration;
 
-import com.safetynet.alerts.api.exceptions.PersonAlreadyExistException;
-import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
+import com.safetynet.alerts.api.config.DataSource;
 import com.safetynet.alerts.api.model.Person;
-import com.safetynet.alerts.api.service.PersonService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.safetynet.alerts.api.config.DataSourceTest.asJsonString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = PersonController.class)
-public class PersonControllerTest {
-
+@SpringBootTest
+@AutoConfigureMockMvc
+public class PersonControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private PersonService personService;
-
-    private Person person;
+    @BeforeEach
+    private void setUpPerTest() throws Exception {
+        DataSource dataSource = new DataSource();
+        dataSource.persons.clear();
+        dataSource.init();
+    }
 
 
     @Test
@@ -40,7 +41,8 @@ public class PersonControllerTest {
 
         //THEN
         mockMvc.perform(get("/person"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is("John")));
     }
 
     @Test
@@ -50,8 +52,9 @@ public class PersonControllerTest {
         //GIVEN
 
         //THEN
-        mockMvc.perform(get("/person/first name 1/last name 1"))
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/person/Jacob/Boyd"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("address", is("1509 Culver St")));
     }
 
     @Test
@@ -59,10 +62,9 @@ public class PersonControllerTest {
     public void testGetPersonByFirstnameAndLastNameNotFound() throws Exception {
 
         //GIVEN
-        given(personService.findPersonByFirstNameAndLastName("first name 8", "last name 8")).willThrow(new PersonNotFoundException("Get person by firstname and lastname error because person is not found"));
 
         //THEN
-        mockMvc.perform(get("/person/first name 8/last name 8"))
+        mockMvc.perform(get("/person/unknownFirstName/unknownLastName"))
                 .andExpect(status().isNotFound());
 
     }
@@ -72,8 +74,7 @@ public class PersonControllerTest {
     public void testPostANewPerson() throws Exception {
 
         //GIVEN
-        Person person = new Person("first name", "last name", null, null, null, null, null);
-        when(personService.createNewPerson(person)).thenReturn(null);
+        Person person = new Person("first name", "last name", "1509 Culver St", null, null, null, null);
 
         //THEN
         mockMvc.perform(MockMvcRequestBuilders
@@ -81,7 +82,8 @@ public class PersonControllerTest {
                 .content(asJsonString(person))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("address", is("1509 Culver St")));
     }
 
     @Test
@@ -89,7 +91,7 @@ public class PersonControllerTest {
     public void testPostPersonAlreadyExisting() throws Exception {
 
         //GIVEN
-        given(personService.createNewPerson(person)).willThrow(new PersonAlreadyExistException("Create person error because person already exist"));
+        Person person = new Person("Tenley", "Boyd", null, null, null, null, null);
 
         //THEN
         mockMvc.perform(MockMvcRequestBuilders
@@ -105,7 +107,7 @@ public class PersonControllerTest {
     public void testPutExistingPerson() throws Exception {
 
         //GIVEN
-        Person person = new Person("first name 1", "last name 1", null, null, null, null, null);
+        Person person = new Person("Tenley", "Boyd", "new address", "new city", "new zip", "new phone", "new email");
 
         //THEN
         mockMvc.perform(MockMvcRequestBuilders
@@ -113,41 +115,38 @@ public class PersonControllerTest {
                 .content(asJsonString(person))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("address", is("new address")));
     }
 
-//    @Test
-//    @DisplayName("PUT request (/person) with a unknown person must return an HTTP 404 response")
-//    public void testPutAUnknownPerson() throws Exception {
-//
-//        //GIVEN
-//        Person person = null;
-//        given(personService.updatePerson(person)).willThrow(new PersonNotFoundException("Trying to update non existing person"));
-//
-//        //THEN
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .put("/person")
-//                .content(asJsonString(person))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNotFound());
-//    }
+    @Test
+    @DisplayName("PUT request (/person) with a unknown person must return an HTTP 404 response")
+    public void testPutAUnknownPerson() throws Exception {
+
+        //GIVEN
+        Person person = new Person("Unknown person", "Boyd", "new address", "new city", "new zip", "new phone", "new email");
+
+
+        //THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/person")
+                .content(asJsonString(person))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     @DisplayName("DELETE request (/person/{firstName}/{lastName}) must return an HTTP 200 response")
     public void testDeletePerson() throws Exception {
 
         //GIVEN
-        Person person = new Person("first name", "last name", null, null, null, null, null);
 
         //THEN
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/person/firstname/lastname")
-                .content(asJsonString(person))
+                .delete("/person/John/Boyd")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
-
 }

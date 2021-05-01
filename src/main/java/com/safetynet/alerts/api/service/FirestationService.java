@@ -39,6 +39,6 @@ public interface FirestationService {
      * Delete firestation by address
      * @param address of firestation to delete
      */
-    void deleteFirestationByAddress(String address);
+    void deleteFirestation(String address);
 
 }

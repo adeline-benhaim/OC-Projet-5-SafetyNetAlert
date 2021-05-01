@@ -1,5 +1,6 @@
 package com.safetynet.alerts.api.controller;
 
+import com.safetynet.alerts.api.exceptions.FirestationAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.model.Firestation;
 import com.safetynet.alerts.api.service.FirestationService;
@@ -12,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.safetynet.alerts.api.controller.PersonControllerTest.asJsonString;
+import static com.safetynet.alerts.api.config.DataSourceTest.asJsonString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,13 +27,17 @@ public class FirestationControllerTest {
 
     @MockBean
     private FirestationService firestationService;
-    @MockBean
+
     private Firestation firestation;
 
 
     @Test
     @DisplayName("GET request (/firestation) must return an HTTP 200 response")
     public void testGetFirestations() throws Exception {
+
+        //GIVEN
+
+        //THEN
         mockMvc.perform(get("/firestation"))
                 .andExpect(status().isOk());
     }
@@ -41,16 +46,22 @@ public class FirestationControllerTest {
     @DisplayName("GET request (/firestation/{address}) with an exiting firestation must return an HTTP 200 response")
     public void testGetFirestationByAddressIsOk() throws Exception {
 
-        mockMvc.perform(get("/firestation/address"))
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/firestation/address 1"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("GET request (/firestation/{address}) with an unknown firestation address must return an HTTP 404 response")
     public void testGetFirestationByAddressNotFound() throws Exception {
-        when(firestationService.findFirestationByAddress("address")).thenThrow(FirestationNotFoundException.class);
-        given(firestationService.findFirestationByAddress(firestation.getAddress())).willThrow(new FirestationNotFoundException("Get firestation by address error because address is not found"));
-        mockMvc.perform(get("/firestation/address"))
+
+        //GIVEN
+        given(firestationService.findFirestationByAddress("address 8")).willThrow(new FirestationNotFoundException("Get firestation by address error because address is not found"));
+
+        //THEN
+        mockMvc.perform(get("/firestation/address 8"))
                 .andExpect(status().isNotFound());
     }
 
@@ -58,10 +69,11 @@ public class FirestationControllerTest {
     @DisplayName("POST request (/firestation) must return an HTTP 200 response")
     public void testPostFirestation() throws Exception {
 
+        //GIVEN
         Firestation firestation = new Firestation("address","number");
+        when(firestationService.createNewFirestation(firestation)).thenReturn(null);
 
-        firestationService.createNewFirestation(firestation);
-
+        //THEN
         mockMvc.perform( MockMvcRequestBuilders
                 .post("/firestation")
                 .content(asJsonString(firestation))
@@ -70,14 +82,31 @@ public class FirestationControllerTest {
                 .andExpect(status().isOk());
     }
 
+
+    @Test
+    @DisplayName("POST request (/firestation) with a firestation already existing in data source must return an HTTP 400 response")
+    public void testPostFirestationAlreadyExisting() throws Exception {
+
+        //GIVEN
+        given(firestationService.createNewFirestation(firestation)).willThrow(new FirestationAlreadyExistException("Create firestation error because person already exist"));
+
+        //THEN
+        mockMvc.perform( MockMvcRequestBuilders
+                .post("/firestation")
+                .content(asJsonString(firestation))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
     @Test
     @DisplayName("PUT request (/firestation) must return an HTTP 200 response")
     public void testPutFirestation() throws Exception {
 
+        //GIVEN
         Firestation firestation = new Firestation("address","number");
 
-        firestationService.updateFirestation(firestation);
-
+        //THEN
         mockMvc.perform( MockMvcRequestBuilders
                 .put("/firestation")
                 .content(asJsonString(firestation))
@@ -87,20 +116,36 @@ public class FirestationControllerTest {
     }
 
 //    @Test
-//    @DisplayName("DELETE request (/firestation) by address must return an HTTP 200 response")
-//    public void testDeleteFirestationByAddress() throws Exception {
+//    @DisplayName("PUT request (/firestation) with a unknown firestation must return an HTTP 404 response")
+//    public void testPutUnknownFirestation() throws Exception {
 //
-//        Firestation firestation = new Firestation("address","number");
+//        //GIVEN
+//        given(firestationService.updateFirestation(firestation)).willThrow(new FirestationNotFoundException("Trying to update non existing firestation"));
 //
-//        firestationService.deleteFirestationByAddress(firestation);
-//
+//        //THEN
 //        mockMvc.perform( MockMvcRequestBuilders
-//                .delete("/firestation/address/address")
+//                .put("/firestation")
 //                .content(asJsonString(firestation))
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
+//                .andExpect(status().isNotFound());
 //    }
+
+    @Test
+    @DisplayName("DELETE request (/firestation) by address must return an HTTP 200 response")
+    public void testDeleteFirestationByAddress() throws Exception {
+
+        //GIVEN
+        Firestation firestation = new Firestation("address","number");
+
+        //THEN
+        mockMvc.perform( MockMvcRequestBuilders
+                .delete("/firestation/address")
+                .content(asJsonString(firestation))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
 
 }

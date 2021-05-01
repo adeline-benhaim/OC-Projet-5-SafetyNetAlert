@@ -1,7 +1,7 @@
 package com.safetynet.alerts.api.service;
 
 import com.safetynet.alerts.api.dao.MedicalRecordDao;
-import com.safetynet.alerts.api.exceptions.MedicalRecordAlreadyExist;
+import com.safetynet.alerts.api.exceptions.MedicalRecordAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.MedicalRecordNotFoundException;
 import com.safetynet.alerts.api.model.MedicalRecord;
 import org.slf4j.Logger;
@@ -74,7 +74,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             return medicalRecordDao.save(medicalRecord);
         } else {
             logger.error("Create medical record error because medical record for : {} {} already exist", medicalRecord.getFirstName(), medicalRecord.getLastName());
-            throw new MedicalRecordAlreadyExist("Create medical record error because medical record for " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName() + " already exist");
+            throw new MedicalRecordAlreadyExistException("Create medical record error because medical record for " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName() + " already exist");
         }
     }
 

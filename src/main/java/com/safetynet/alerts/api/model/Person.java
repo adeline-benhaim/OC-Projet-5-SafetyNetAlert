@@ -21,13 +21,13 @@ public class Person {
 //        this.lastName = lastName;
 //    }
 
-    public Person(String firstName, String lastName, String phone, String zip, String address, String city, String email) {
+    public Person(String firstName, String lastName, String address,String city, String zip, String phone, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phone = phone;
-        this.zip = zip;
         this.address = address;
         this.city = city;
+        this.zip = zip;
+        this.phone = phone;
         this.email = email;
     }
 
