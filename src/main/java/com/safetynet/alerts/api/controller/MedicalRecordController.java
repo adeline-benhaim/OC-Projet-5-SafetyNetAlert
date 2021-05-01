@@ -1,6 +1,6 @@
 package com.safetynet.alerts.api.controller;
 
-import com.safetynet.alerts.api.exceptions.MedicalRecordAlreadyExist;
+import com.safetynet.alerts.api.exceptions.MedicalRecordAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.MedicalRecordNotFoundException;
 import com.safetynet.alerts.api.model.MedicalRecord;
 import com.safetynet.alerts.api.service.MedicalRecordService;
@@ -69,7 +69,7 @@ public class MedicalRecordController {
         try {
             MedicalRecord newMedicalRecord = medicalRecordService.createNewMedicalRecord(medicalRecord);
             return ResponseEntity.ok(newMedicalRecord);
-        } catch (MedicalRecordAlreadyExist e) {
+        } catch (MedicalRecordAlreadyExistException e) {
             logger.error("REST : Create medical record error because medical record for : {} {} already exist", medicalRecord.getFirstName(), medicalRecord.getLastName());
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -90,7 +90,7 @@ public class MedicalRecordController {
             return ResponseEntity.ok(medicalRecordToUpdate);
         } catch (MedicalRecordNotFoundException e) {
             logger.error("REST : Trying to update non existing medical record");
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

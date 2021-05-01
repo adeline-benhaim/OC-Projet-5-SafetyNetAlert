@@ -42,6 +42,7 @@ public class DataSource {
         byte[] bytesFile = Files.readAllBytes(new File(filePath).toPath());
         JsonIterator iter = JsonIterator.parse(bytesFile);
         Any any = iter.readAny();
+
         Any personAny = any.get("persons");
         personAny.forEach(a -> persons.add(Person.builder()
                 .firstName(a.get("firstName").toString())

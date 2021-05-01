@@ -45,7 +45,7 @@ public class PersonTest {
         String address = "address";
 
         //WHEN
-        person = new Person(null, null, null, null, "address", null, null);
+        person = new Person(null, null, "address", null, null, null, null);
 
         //THEN
         assertThat(address).isEqualTo(person.getAddress());
@@ -59,7 +59,7 @@ public class PersonTest {
         String city = "city";
 
         //WHEN
-        person = new Person(null, null, null, null, null, "city", null);
+        person = new Person(null, null, null, "city", null, null, null);
 
         //THEN
         assertThat(city).isEqualTo(person.getCity());
@@ -73,7 +73,7 @@ public class PersonTest {
         String zip = "zip";
 
         //WHEN
-        person = new Person(null, null, null, "zip", null, null, null);
+        person = new Person(null, null, null, null, "zip", null, null);
 
         //THEN
         assertThat(zip).isEqualTo(person.getZip());
@@ -87,7 +87,7 @@ public class PersonTest {
         String phone = "phone";
 
         //WHEN
-        person = new Person(null, null, "phone", null, null, null, null);
+        person = new Person(null, null, null, null, null, "phone", null);
 
         //THEN
         assertThat(phone).isEqualTo(person.getPhone());

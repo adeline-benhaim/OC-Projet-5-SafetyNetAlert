@@ -3,7 +3,9 @@ package com.safetynet.alerts.api.dao;
 import com.safetynet.alerts.api.config.DataSource;
 import com.safetynet.alerts.api.config.DataSourceTest;
 import com.safetynet.alerts.api.model.Person;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -47,40 +49,6 @@ class PersonDaoImplTest {
     }
 
     @Test
-    @DisplayName("Save a new person which does not exist in the data source")
-    void saveNewPersonTest() {
-
-        // GIVEN
-        Mockito.when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
-
-        // WHEN
-        Person person = new Person("first name", "last name", "phone",null,null,null,null);
-        Person createdPerson = personDao.save(person);
-
-        // THEN
-        assertEquals("first name", createdPerson.getFirstName());
-        assertEquals("last name", createdPerson.getLastName());
-        assertEquals("phone", createdPerson.getPhone());
-    }
-
-    @Test
-    @DisplayName("Save a person already existing in the data source")
-    void savePersonAlreadyExistingTest() {
-
-        // GIVEN
-        Mockito.when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
-
-        // WHEN
-        Person person = new Person("first name 1", "last name 1", "phone 5",null,null,null,null);
-        Person createdPerson = personDao.save(person);
-
-        // THEN
-        assertEquals("first name 1", createdPerson.getFirstName());
-        assertEquals("last name 1", createdPerson.getLastName());
-        assertEquals("phone 5", createdPerson.getPhone());
-    }
-
-    @Test
     @DisplayName("Get an existing person found by first and last name")
     void findExistingPersonByFirstNameAndLastNameTest() {
 
@@ -108,20 +76,59 @@ class PersonDaoImplTest {
         assertNull(person);
     }
 
-//    @Test
-//    @DisplayName("Delete a person found by first and last name")
-//    void deletePersonFoundByFirstNameAndLastNameTest() {
-//
-//        // GIVEN
-//        Mockito.when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
-//        Person personToDelete = new Person("first name 1", "last name 1", null, null, null, null, null);
-//        // WHEN
-//        personDao.delete(dataSourceTest.getAllPersonMocked().get(2));
-//
-//        // THEN
-//        assertEquals(dataSourceTest.getPersonsMocked().get(2).getFirstName(), personToDelete.getFirstName());
-//        for(int i = 0 ; i < dataSourceTest.getPersonsMocked().size(); i++)
-//            System.out.println(dataSourceTest.getPersonsMocked().get(i));
-//    }
+    @Test
+    @DisplayName("Save a new person which does not exist in the data source")
+    void saveNewPersonTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
+
+        // WHEN
+        Person person = new Person("first name", "last name", "address",null,null,null,null); // doesn't exist on dataSource
+        personDao.save(person);
+
+        // THEN
+        assertEquals("first name", dataSourceTest.getPersonsMocked().get(3).getFirstName());
+        assertEquals("last name", dataSourceTest.getPersonsMocked().get(3).getLastName());
+        assertEquals("address", dataSourceTest.getPersonsMocked().get(3).getAddress());
+    }
+
+    @Test
+    @DisplayName("Save a person already existing in the data source")
+    void savePersonAlreadyExistingTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
+
+        // WHEN
+        Person person1 = new Person("first name 1", "last name 1", "address 5",null,null,null,null); // already exist on index 0 in dataSource
+        personDao.save(person1);
+
+        // THEN
+        assertEquals("first name 1", dataSourceTest.getPersonsMocked().get(0).getFirstName());
+        assertEquals("last name 1", dataSourceTest.getPersonsMocked().get(0).getLastName());
+        assertEquals("address 5", dataSourceTest.getPersonsMocked().get(0).getAddress());
+    }
+
+    @Test
+    @DisplayName("Delete a person existing in data Source found by first and last name")
+    void deletePersonFoundByFirstNameAndLastNameTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
+        Person person = new Person("first name 5", "last name 5", "phone 5",null,null,null,null);
+        personDao.save(person);
+        int sizeListBeforeDelete = dataSourceTest.getPersonsMocked().size();
+
+        // WHEN
+        personDao.delete(person.firstName,person.lastName);
+        int sizeListAfterDelete = dataSourceTest.getPersonsMocked().size();
+
+        // THEN
+        assertEquals(4, sizeListBeforeDelete);
+        assertEquals(3, sizeListAfterDelete);
+
+    }
+
 
 }

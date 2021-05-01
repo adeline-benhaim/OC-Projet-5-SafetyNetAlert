@@ -49,43 +49,6 @@ public class MedicalRecordDaoImplTest {
     }
 
     @Test
-    @DisplayName("Save a new medical record which does not exist in the data source")
-    void saveNewMedicalRecordTest() {
-
-        // GIVEN
-        Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
-
-        // WHEN
-        MedicalRecord medicalRecord = new MedicalRecord("first name", "last name", "birthdate", "medications", "allergies");
-        MedicalRecord createdMedicalRecord = medicalRecordDao.save(medicalRecord);
-
-        // THEN
-        assertEquals("first name", createdMedicalRecord.getFirstName());
-        assertEquals("last name", createdMedicalRecord.getLastName());
-        assertEquals("birthdate", createdMedicalRecord.getBirthdate());
-        assertEquals("medications", createdMedicalRecord.getMedications());
-        assertEquals("allergies", createdMedicalRecord.getAllergies());
-    }
-
-    @Test
-    @DisplayName("Save a medical record already existing in the data source")
-    void saveMedicalRecordAlreadyExistingTest() {
-
-        // GIVEN
-        Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
-
-        // WHEN
-        MedicalRecord medicalRecord = new MedicalRecord("first name 1", "last name 1", "birthdate 5", "medications", "allergies");
-        MedicalRecord createdMedicalRecord = medicalRecordDao.save(medicalRecord);
-
-
-        // THEN
-        assertEquals("first name 1", createdMedicalRecord.getFirstName());
-        assertEquals("last name 1", createdMedicalRecord.getLastName());
-        assertEquals("birthdate 5", createdMedicalRecord.getBirthdate());
-    }
-
-    @Test
     @DisplayName("Get an existing medical record found by first and last name")
     void findExistingMedicalRecordByFirstNameAndLastNameTest() {
 
@@ -113,17 +76,59 @@ public class MedicalRecordDaoImplTest {
         assertNull(medicalRecord);
     }
 
-//    @Test
-//    @DisplayName("Delete a medical record found by first and last name")
-//    void deleteMedicalRecordFoundByFirstNameAndLastNameTest() {
-//
-//        // GIVEN
-//        Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
-//        MedicalRecord medicalRecordToDelete = new MedicalRecord("first name 1", "last name 1", null, null, null);
-//        // WHEN
-//        medicalRecordDao.delete(dataSourceTest.getAllMedicalRecordMocked().get(2));
-//
-//        // THEN
-//        assertEquals(dataSourceTest.getMedicalRecordsMocked().get(2).getFirstName(), medicalRecordToDelete.getFirstName());
-//    }
+    @Test
+    @DisplayName("Save a new medical record which does not exist in the data source")
+    void saveNewMedicalRecordTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
+
+        // WHEN
+        MedicalRecord medicalRecord = new MedicalRecord("first name", "last name", "birthdate", "medications", "allergies");
+        medicalRecordDao.save(medicalRecord);
+
+        // THEN
+        assertEquals("first name", dataSourceTest.getMedicalRecordsMocked().get(3).getFirstName());
+        assertEquals("last name", dataSourceTest.getMedicalRecordsMocked().get(3).getLastName());
+        assertEquals("birthdate", dataSourceTest.getMedicalRecordsMocked().get(3).getBirthdate());
+        assertEquals("medications", dataSourceTest.getMedicalRecordsMocked().get(3).getMedications());
+        assertEquals("allergies", dataSourceTest.getMedicalRecordsMocked().get(3).allergies);
+    }
+
+    @Test
+    @DisplayName("Save a medical record already existing in the data source")
+    void saveMedicalRecordAlreadyExistingTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
+
+        // WHEN
+        MedicalRecord medicalRecord = new MedicalRecord("first name 1", "last name 1", "birthdate 5", "medications", "allergies");
+        medicalRecordDao.save(medicalRecord);
+
+
+        // THEN
+        assertEquals("first name 1", dataSourceTest.getMedicalRecordsMocked().get(0).getFirstName());
+        assertEquals("last name 1", dataSourceTest.getMedicalRecordsMocked().get(0).getLastName());
+        assertEquals("birthdate 5", dataSourceTest.getMedicalRecordsMocked().get(0).getBirthdate());
+    }
+
+    @Test
+    @DisplayName("Delete a medical record found by first and last name")
+    void deleteMedicalRecordFoundByFirstNameAndLastNameTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
+        MedicalRecord medicalRecord = new MedicalRecord("first name 5", "last name 5", null, null, null);
+        medicalRecordDao.save(medicalRecord);
+        int sizeListBeforeDelete = dataSourceTest.getMedicalRecordsMocked().size();
+
+        // WHEN
+        medicalRecordDao.delete(medicalRecord.getFirstName(), medicalRecord.getLastName());
+        int sizeListAfterDelete = dataSourceTest.getMedicalRecordsMocked().size();
+
+        // THEN
+        assertEquals(4, sizeListBeforeDelete);
+        assertEquals(3, sizeListAfterDelete);
+    }
 }

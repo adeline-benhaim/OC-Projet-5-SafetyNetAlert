@@ -1,5 +1,6 @@
 package com.safetynet.alerts.api.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.api.model.Firestation;
 import com.safetynet.alerts.api.model.MedicalRecord;
 import com.safetynet.alerts.api.model.Person;
@@ -27,16 +28,6 @@ public class DataSourceTest {
         return personsMocked;
     }
 
-    public Person findByFirstNameAndLastNameTest(String firstName, String lastName) {
-        List<Person> persons = getAllPersonMocked();
-        for (Person person : persons) {
-            if (person.getFirstName().equals(firstName) && person.getLastName().equals(lastName)) {
-                return person;
-            }
-        }
-        return null;
-    }
-
     public List<Firestation> getAllFirestationMocked() {
         Firestation firestation1 = new Firestation("address 1", "number 1");
         Firestation firestation2 = new Firestation("address 2", "number 2");
@@ -44,7 +35,6 @@ public class DataSourceTest {
         firestationsMocked.add(firestation1);
         firestationsMocked.add(firestation2);
         firestationsMocked.add(firestation3);
-//        System.out.println(firestationsMocked);
         return firestationsMocked;
     }
 
@@ -60,7 +50,6 @@ public class DataSourceTest {
 
     public void clearPersonsMocked() {
         personsMocked.clear();
-        getPersonsMocked().clear();
     }
     public void clearFirestationsMocked() {
         firestationsMocked.clear();
@@ -68,6 +57,15 @@ public class DataSourceTest {
     public void clearMedicalRecordsMocked() {
         medicalRecordsMocked.clear();
     }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
 
 //        Person person1 = Person.builder()
