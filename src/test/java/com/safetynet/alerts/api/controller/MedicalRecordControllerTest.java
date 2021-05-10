@@ -70,7 +70,10 @@ public class MedicalRecordControllerTest {
     public void testPostMedicalRecord() throws Exception {
 
         //GIVEN
-        MedicalRecord medicalRecord = new MedicalRecord("firstname","lastname",null,null,null);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("first name")
+                .lastName("last name")
+                .build();
         when(medicalRecordService.createNewMedicalRecord(medicalRecord)).thenReturn(null);
 
         //THEN
@@ -103,7 +106,10 @@ public class MedicalRecordControllerTest {
     public void testPutMedicalRecord() throws Exception {
 
         //GIVEN
-        MedicalRecord medicalRecord = new MedicalRecord("first name 1","last name 1",null,null,null);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("first name")
+                .lastName("last name")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders
@@ -135,7 +141,10 @@ public class MedicalRecordControllerTest {
     public void testDeleteMedicalRecord() throws Exception {
 
         //GIVEN
-        MedicalRecord medicalRecord = new MedicalRecord("first name","last name",null,null,null);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("first name")
+                .lastName("last name")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders

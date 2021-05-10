@@ -1,6 +1,7 @@
 package com.safetynet.alerts.api.dao;
 
 import com.safetynet.alerts.api.config.DataSource;
+import com.safetynet.alerts.api.model.Firestation;
 import com.safetynet.alerts.api.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.util.List;
 public class PersonDaoImpl implements PersonDao {
     @Autowired
     private DataSource dataSource;
+
 
     /**
      * Find all persons with their firstname, lastname, address, city, zip, email
@@ -67,6 +69,6 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public void delete(String firstName, String lastName) {
         List<Person> persons = dataSource.getAllPersons();
-        persons.removeIf(elem -> elem.firstName.equalsIgnoreCase(firstName) && elem.lastName.equalsIgnoreCase(lastName));
+        persons.removeIf(elem -> elem.getFirstName().equalsIgnoreCase(firstName) && elem.getLastName().equalsIgnoreCase(lastName));
     }
 }

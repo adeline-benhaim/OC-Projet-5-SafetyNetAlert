@@ -14,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MedicalRecordDaoImplTest {
@@ -82,17 +81,28 @@ public class MedicalRecordDaoImplTest {
 
         // GIVEN
         Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
+        int sizeListBeforeSave = dataSourceTest.getMedicalRecordsMocked().size();
 
         // WHEN
-        MedicalRecord medicalRecord = new MedicalRecord("first name", "last name", "birthdate", "medications", "allergies");
-        medicalRecordDao.save(medicalRecord);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("first name")
+                .lastName("last name")
+                .birthdate("birthdate")
+                .medications("medications")
+                .allergies("allergies")
+                .build();
+        MedicalRecord saveMedicalRecord = medicalRecordDao.save(medicalRecord);
+        int sizeListAfterSave = dataSourceTest.getMedicalRecordsMocked().size();
 
         // THEN
-        assertEquals("first name", dataSourceTest.getMedicalRecordsMocked().get(3).getFirstName());
-        assertEquals("last name", dataSourceTest.getMedicalRecordsMocked().get(3).getLastName());
-        assertEquals("birthdate", dataSourceTest.getMedicalRecordsMocked().get(3).getBirthdate());
-        assertEquals("medications", dataSourceTest.getMedicalRecordsMocked().get(3).getMedications());
-        assertEquals("allergies", dataSourceTest.getMedicalRecordsMocked().get(3).allergies);
+        MedicalRecord medicalRecordTest = dataSourceTest.getMedicalRecordsMocked().get(3);
+        assertEquals(saveMedicalRecord.getFirstName(), medicalRecordTest.getFirstName());
+        assertEquals(saveMedicalRecord.getLastName(), medicalRecordTest.getLastName());
+        assertEquals(saveMedicalRecord.getBirthdate(), medicalRecordTest.getBirthdate());
+        assertEquals("medications", medicalRecordTest.getMedications());
+        assertEquals("allergies", medicalRecordTest.getAllergies());
+        assertTrue(sizeListBeforeSave < sizeListAfterSave);
+        assertEquals(sizeListBeforeSave + 1, sizeListAfterSave);
     }
 
     @Test
@@ -101,16 +111,27 @@ public class MedicalRecordDaoImplTest {
 
         // GIVEN
         Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
+        int sizeListBeforeSave = dataSourceTest.getMedicalRecordsMocked().size();
 
         // WHEN
-        MedicalRecord medicalRecord = new MedicalRecord("first name 1", "last name 1", "birthdate 5", "medications", "allergies");
-        medicalRecordDao.save(medicalRecord);
-
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("first name 1")
+                .lastName("last name 1")
+                .birthdate("birthdate 5")
+                .medications("medications 5")
+                .allergies("allergies 5")
+                .build();
+        MedicalRecord saveMedicalRecord = medicalRecordDao.save(medicalRecord);
+        int sizeListAfterSave = dataSourceTest.getMedicalRecordsMocked().size();
 
         // THEN
-        assertEquals("first name 1", dataSourceTest.getMedicalRecordsMocked().get(0).getFirstName());
-        assertEquals("last name 1", dataSourceTest.getMedicalRecordsMocked().get(0).getLastName());
-        assertEquals("birthdate 5", dataSourceTest.getMedicalRecordsMocked().get(0).getBirthdate());
+        MedicalRecord medicalRecordTest = dataSourceTest.getMedicalRecordsMocked().get(0);
+        assertEquals(saveMedicalRecord.getFirstName(), medicalRecordTest.getFirstName());
+        assertEquals(saveMedicalRecord.getLastName(), medicalRecordTest.getLastName());
+        assertEquals(saveMedicalRecord.getBirthdate(), medicalRecordTest.getBirthdate());
+        assertEquals("medications 5", medicalRecordTest.getMedications());
+        assertEquals("allergies 5", medicalRecordTest.getAllergies());
+        assertEquals(sizeListBeforeSave, sizeListAfterSave);
     }
 
     @Test
@@ -119,16 +140,15 @@ public class MedicalRecordDaoImplTest {
 
         // GIVEN
         Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
-        MedicalRecord medicalRecord = new MedicalRecord("first name 5", "last name 5", null, null, null);
-        medicalRecordDao.save(medicalRecord);
         int sizeListBeforeDelete = dataSourceTest.getMedicalRecordsMocked().size();
 
         // WHEN
-        medicalRecordDao.delete(medicalRecord.getFirstName(), medicalRecord.getLastName());
+        MedicalRecord medicalRecordToDelete = dataSourceTest.getMedicalRecordsMocked().get(0);
+        medicalRecordDao.delete(medicalRecordToDelete.getFirstName(), medicalRecordToDelete.getLastName());
         int sizeListAfterDelete = dataSourceTest.getMedicalRecordsMocked().size();
 
         // THEN
-        assertEquals(4, sizeListBeforeDelete);
-        assertEquals(3, sizeListAfterDelete);
+        assertTrue(sizeListBeforeDelete > sizeListAfterDelete);
+        assertEquals(sizeListBeforeDelete - 1, sizeListAfterDelete);
     }
 }

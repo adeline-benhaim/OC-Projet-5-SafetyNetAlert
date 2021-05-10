@@ -1,15 +1,23 @@
 package com.safetynet.alerts.api.service;
 
+import com.safetynet.alerts.api.dao.FirestationDao;
+import com.safetynet.alerts.api.dao.MedicalRecordDao;
 import com.safetynet.alerts.api.dao.PersonDao;
+import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
+import com.safetynet.alerts.api.model.Firestation;
+import com.safetynet.alerts.api.model.MedicalRecord;
 import com.safetynet.alerts.api.model.Person;
+import com.safetynet.alerts.api.model.dto.ListPersonAdultChildDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -17,6 +25,10 @@ public class PersonServiceImpl implements PersonService {
 
     @Autowired
     private PersonDao personDao;
+    @Autowired
+    MedicalRecordDao medicalRecordDao;
+    @Autowired
+    FirestationDao firestationDao;
 
     /**
      * Find all persons
@@ -33,7 +45,7 @@ public class PersonServiceImpl implements PersonService {
      * Find person by firstname and lastname
      *
      * @param firstName of the wanted person
-     * @param lastName of the wanted person
+     * @param lastName  of the wanted person
      * @return the information of the person sought
      */
     @Override
@@ -54,7 +66,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person updatePerson(Person person) {
         logger.info("Update person : {}" + " " + "{} ", person.getFirstName(), person.getLastName());
-        Person currentPerson = personDao.findByFirstNameAndLastName(person.firstName, person.lastName);
+        Person currentPerson = personDao.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
         if (currentPerson == null) throw new PersonNotFoundException("Trying to update non existing person");
         personDao.save(person);
         return person;
@@ -82,13 +94,82 @@ public class PersonServiceImpl implements PersonService {
      * Delete a person found by firstname and lastname
      *
      * @param firstName of the person to delete
-     * @param lastName of the person to delete
+     * @param lastName  of the person to delete
      * @return null
      */
     @Override
     public void deletePerson(String firstName, String lastName) {
         logger.info("Delete person : {}" + " " + "{} ", firstName, lastName);
         personDao.delete(firstName, lastName);
+    }
+
+    /**
+     * Find a list of persons covered by the station number sought
+     *
+     * @param stationNumber of firestation for which persons are sought
+     * @return a global list of persons covered by the station number
+     */
+    @Override
+    public List<Person> findGlobalListOfPersonsByStationNumber(String stationNumber) {
+        logger.info("Get list of persons covered by the firestation number : {}", stationNumber);
+        List<Firestation> firestationList = firestationDao.findFirestations();
+        List<String> addresses = firestationList
+                .stream()
+                .filter(firestation -> firestation.getStationNumber().equals(stationNumber))
+                .map(Firestation::getAddress)
+                .collect(Collectors.toList());
+        if (!addresses.isEmpty()) {
+            List<Person> persons = personDao.findPersons();
+            List<Person> personsByStationNumber = new ArrayList<>();
+            for (Person person : persons) {
+                for (Object address : addresses) {
+                    if (person.getAddress().equals(address)) {
+                        personsByStationNumber.add(person);
+                    }
+                }
+            }
+            return personsByStationNumber;
+        } else {
+            logger.error("Get list of persons covered by the firestation number : {}" + " is not found", stationNumber);
+            throw new FirestationNotFoundException("Trying to get non existing firestation for given station number");
+        }
+    }
+
+    /**
+     * Find a list of adults and a list of children from a list of persons
+     *
+     * @param personList a list of persons included adults and children
+     * @return a list of adults and a list of children
+     */
+    @Override
+    public ListPersonAdultChildDto findChildrenListAndAdultList(List<Person> personList) {
+        logger.info("Get a list of children and a list of adults");
+        List<Person> childrenList = new ArrayList<>();
+        List<Person> adultList = new ArrayList<>();
+        List<MedicalRecord> medicalRecordList = medicalRecordDao.findMedicalRecords();
+        if (!personList.isEmpty()) {
+            for (Person person : personList) {
+                for (MedicalRecord medicalRecord : medicalRecordList) {
+                    if (medicalRecord.getFirstName().equals(person.getFirstName()) && medicalRecord.getLastName().equals(person.getLastName())) {
+                        String birthdate = medicalRecord.getBirthdate();
+                        person.setBirthdate(birthdate);
+                        person.calculateAge(birthdate);
+                        if (person.getAge() <= 18) {
+                            childrenList.add(person);
+                        } else {
+                            adultList.add(person);
+                        }
+                    }
+                }
+            }
+            return ListPersonAdultChildDto.builder()
+                    .listOfAdult(adultList)
+                    .listOfChild(childrenList)
+                    .build();
+        } else {
+            logger.error("Error to get a list of adults and children because list of person is empty");
+            throw new FirestationNotFoundException("Error to get a list of adults and children because list of person is empty");
+        }
     }
 }
 

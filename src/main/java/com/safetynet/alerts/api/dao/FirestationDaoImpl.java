@@ -35,7 +35,6 @@ public class FirestationDaoImpl implements FirestationDao {
         for (Firestation firestation : firestations) {
             if (firestation.getAddress().equalsIgnoreCase(address)) {
                 return firestation;
-
             }
         }
         return null;

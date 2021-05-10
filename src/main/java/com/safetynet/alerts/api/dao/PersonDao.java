@@ -8,6 +8,7 @@ public interface PersonDao {
 
     /**
      * Find all persons with their firstname, lastname, address, city, zip, email
+     *
      * @return list with all persons with their firstname, lastname, address, city, zip, email
      */
     List<Person> findPersons();

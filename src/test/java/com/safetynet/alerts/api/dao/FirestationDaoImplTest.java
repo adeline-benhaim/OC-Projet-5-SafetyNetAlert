@@ -14,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FirestationDaoImplTest {
@@ -82,14 +81,23 @@ public class FirestationDaoImplTest {
 
         // GIVEN
         Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
+        int sizeListBeforeSave = dataSourceTest.getFirestationsMocked().size();
+
 
         // WHEN
-        Firestation firestation = new Firestation("address", "number");
-        firestationDao.save(firestation);
+        Firestation firestation = Firestation.builder()
+                .address("address")
+                .stationNumber("number")
+                .build();
+        Firestation saveFirestation = firestationDao.save(firestation);
+        int sizeListAfterSave = dataSourceTest.getFirestationsMocked().size();
 
         // THEN
-        assertEquals("address", dataSourceTest.getFirestationsMocked().get(3).getAddress());
-        assertEquals("number", dataSourceTest.getFirestationsMocked().get(3).getStationNumber());
+        Firestation firestationTest = dataSourceTest.getFirestationsMocked().get(3);
+        assertEquals(saveFirestation.getAddress(), firestationTest.getAddress());
+        assertEquals(saveFirestation.getStationNumber(), firestationTest.getStationNumber());
+        assertTrue(sizeListBeforeSave < sizeListAfterSave);
+        assertEquals(sizeListBeforeSave + 1, sizeListAfterSave);
     }
 
     @Test
@@ -98,14 +106,22 @@ public class FirestationDaoImplTest {
 
         // GIVEN
         Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
+        int sizeListBeforeSave = dataSourceTest.getFirestationsMocked().size();
+
 
         // WHEN
-        Firestation firestation = new Firestation("address 1", "number 5");
-        firestationDao.save(firestation);
+        Firestation firestation = Firestation.builder()
+                .address("address 1")
+                .stationNumber("number 5")
+                .build();
+        Firestation saveFirestation = firestationDao.save(firestation);
+        int sizeListAfterSave = dataSourceTest.getFirestationsMocked().size();
 
         // THEN
-        assertEquals("address 1", dataSourceTest.getFirestationsMocked().get(0).getAddress());
-        assertEquals("number 5", dataSourceTest.getFirestationsMocked().get(0).getStationNumber());
+        Firestation firestationTest = dataSourceTest.getFirestationsMocked().get(0);
+        assertEquals(saveFirestation.getAddress(), firestationTest.getAddress());
+        assertEquals("number 5", firestationTest.getStationNumber());
+        assertEquals(sizeListBeforeSave, sizeListAfterSave);
     }
 
 
@@ -115,16 +131,15 @@ public class FirestationDaoImplTest {
 
         // GIVEN
         Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
-        Firestation firestation = new Firestation("address 5", "number 5");
-        firestationDao.save(firestation);
         int sizeListBeforeDelete = dataSourceTest.getFirestationsMocked().size();
 
         // WHEN
-        firestationDao.delete(firestation.getAddress());
+        Firestation firestationToDelete = dataSourceTest.getFirestationsMocked().get(0);
+        firestationDao.delete(firestationToDelete.getAddress());
         int sizeListAfterDelete = dataSourceTest.getFirestationsMocked().size();
 
         // THEN
-        assertEquals(4, sizeListBeforeDelete);
-        assertEquals(3, sizeListAfterDelete);
+        assertTrue(sizeListBeforeDelete > sizeListAfterDelete);
+        assertEquals(sizeListBeforeDelete - 1, sizeListAfterDelete);
     }
 }

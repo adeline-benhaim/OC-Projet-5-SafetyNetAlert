@@ -17,7 +17,10 @@ public class PersonTest {
         String firstName = "firstName";
 
         //WHEN
-        person = new Person("firstName", null, null, null, null, null, null);
+        person = Person.builder()
+                .firstName("firstName")
+                .build();
+
 
         //THEN
         assertThat(firstName).isEqualTo(person.getFirstName());
@@ -31,7 +34,9 @@ public class PersonTest {
         String lastName = "lastName";
 
         //WHEN
-        person = new Person(null, "lastName", null, null, null, null, null);
+        person = Person.builder()
+                .lastName("lastName")
+                .build();
 
         //THEN
         assertThat(lastName).isEqualTo(person.getLastName());
@@ -45,7 +50,9 @@ public class PersonTest {
         String address = "address";
 
         //WHEN
-        person = new Person(null, null, "address", null, null, null, null);
+        person = Person.builder()
+                .address("address")
+                .build();
 
         //THEN
         assertThat(address).isEqualTo(person.getAddress());
@@ -59,7 +66,9 @@ public class PersonTest {
         String city = "city";
 
         //WHEN
-        person = new Person(null, null, null, "city", null, null, null);
+        person = Person.builder()
+                .city("city")
+                .build();
 
         //THEN
         assertThat(city).isEqualTo(person.getCity());
@@ -73,7 +82,9 @@ public class PersonTest {
         String zip = "zip";
 
         //WHEN
-        person = new Person(null, null, null, null, "zip", null, null);
+        person = Person.builder()
+                .zip("zip")
+                .build();
 
         //THEN
         assertThat(zip).isEqualTo(person.getZip());
@@ -87,7 +98,9 @@ public class PersonTest {
         String phone = "phone";
 
         //WHEN
-        person = new Person(null, null, null, null, null, "phone", null);
+        person = Person.builder()
+                .phone("phone")
+                .build();
 
         //THEN
         assertThat(phone).isEqualTo(person.getPhone());
@@ -101,7 +114,9 @@ public class PersonTest {
         String email = "email";
 
         //WHEN
-        person = new Person(null, null, null, null, null, null, "email");
+        person = Person.builder()
+                .email("email")
+                .build();
 
         //THEN
         assertThat(email).isEqualTo(person.getEmail());
@@ -112,7 +127,8 @@ public class PersonTest {
     void testPersonSetAPerson() {
 
         //GIVEN
-        person = new Person(null, null, null, null, null, null, null);
+        person = Person.builder()
+                .build();
 
         //WHEN
         person.setFirstName("firstName");

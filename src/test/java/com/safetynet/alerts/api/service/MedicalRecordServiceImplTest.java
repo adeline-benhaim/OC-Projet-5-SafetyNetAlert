@@ -84,10 +84,13 @@ public class MedicalRecordServiceImplTest {
     void updateUnknownMedicalRecordByFirstNameAndLastNameTest() {
 
         //GIVEN
-        MedicalRecord medicalRecord = new MedicalRecord("first name 5","last name 5", null,null,null);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("first name 5")
+                .lastName("last name 5")
+                .build();
 
         //WHEN
-        when(medicalRecordDao.findByFirstNameAndLastName(medicalRecord.firstName, medicalRecord.lastName)).thenReturn(null);
+        when(medicalRecordDao.findByFirstNameAndLastName(medicalRecord.getFirstName(), medicalRecord.getLastName())).thenReturn(null);
 
         //THEN
         assertThrows(MedicalRecordNotFoundException.class, () -> medicalRecordService.updateMedicalRecord(medicalRecord));
@@ -98,8 +101,11 @@ public class MedicalRecordServiceImplTest {
     void updateAMedicalRecordFoundInDataSourceTest() {
 
         // GIVEN
-        MedicalRecord presentMedicalRecord = new MedicalRecord("first name 5","last name 5", null,null,null);
-        when(medicalRecordDao.findByFirstNameAndLastName(presentMedicalRecord.firstName,presentMedicalRecord.lastName)).thenReturn(dataSourceTest.getAllMedicalRecordMocked().get(0));
+        MedicalRecord presentMedicalRecord = MedicalRecord.builder()
+                .firstName("first name 5")
+                .lastName("last name 5")
+                .build();
+        when(medicalRecordDao.findByFirstNameAndLastName(presentMedicalRecord.getFirstName(),presentMedicalRecord.getLastName())).thenReturn(dataSourceTest.getAllMedicalRecordMocked().get(0));
 
         // WHEN
         medicalRecordService.updateMedicalRecord(presentMedicalRecord);
@@ -113,7 +119,10 @@ public class MedicalRecordServiceImplTest {
     void createANewMedicalRecordTest() {
 
         // GIVEN
-        MedicalRecord newMedicalRecord = new MedicalRecord("firstname 8","lastname 8",null,null,null);
+        MedicalRecord newMedicalRecord = MedicalRecord.builder()
+                .firstName("first name 8")
+                .lastName("last name 8")
+                .build();
         when(medicalRecordDao.findByFirstNameAndLastName(newMedicalRecord.getFirstName(), newMedicalRecord.getLastName())).thenReturn(null);
 
         // WHEN
@@ -128,11 +137,13 @@ public class MedicalRecordServiceImplTest {
     void createANewMedicalRecordAlreadyExistingInDataSourceTest() {
 
         // GIVEN
-        MedicalRecord newMedicalRecord = new MedicalRecord("firstname 1","lastname 1",null,null,null);
+        MedicalRecord newMedicalRecord = MedicalRecord.builder()
+                .firstName("firstname 1")
+                .lastName("lastname 1")
+                .build();
         when(medicalRecordDao.findByFirstNameAndLastName(newMedicalRecord.getFirstName(), newMedicalRecord.getLastName())).thenReturn(dataSourceTest.getAllMedicalRecordMocked().get(0));
 
         // WHEN
-        medicalRecordDao.findByFirstNameAndLastName(newMedicalRecord.getFirstName(), newMedicalRecord.getLastName());
 
         // THEN
         assertThrows(MedicalRecordAlreadyExistException.class, () -> medicalRecordService.createNewMedicalRecord(newMedicalRecord));

@@ -1,6 +1,7 @@
 package com.safetynet.alerts.api.integration;
 
 import com.safetynet.alerts.api.config.DataSource;
+import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.model.Firestation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 import static com.safetynet.alerts.api.config.DataSourceTest.asJsonString;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,15 +43,15 @@ public class FirestationControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET request (/firestation) must return an HTTP 200 response")
+    @DisplayName("GET request (/firestations) must return an HTTP 200 response")
     public void testGetFirestations() throws Exception {
 
         //GIVEN
 
         //WHEN
-        mockMvc.perform(get("/firestation"))
+        mockMvc.perform(get("/firestations"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].address", is("1509 Culver St")));
+                .andExpect(jsonPath("$[0].address", is("112 Steppes Pl")));
     }
 
     @Test
@@ -80,7 +82,10 @@ public class FirestationControllerIntegrationTest {
     public void testPostFirestation() throws Exception {
 
         //GIVEN
-        Firestation firestation = new Firestation("address","number");
+        Firestation firestation = Firestation.builder()
+                .address("address")
+                .stationNumber("number")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders
@@ -98,7 +103,10 @@ public class FirestationControllerIntegrationTest {
     public void testPostFirestationAlreadyExisting() throws Exception {
 
         //GIVEN
-        Firestation firestation = new Firestation("1509 Culver St","number");
+        Firestation firestation = Firestation.builder()
+                .address("1509 Culver St")
+                .stationNumber("number")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders
@@ -114,7 +122,10 @@ public class FirestationControllerIntegrationTest {
     public void testPutFirestation() throws Exception {
 
         //GIVEN
-        Firestation firestation = new Firestation("29 15th St","newNumber");
+        Firestation firestation = Firestation.builder()
+                .address("29 15th St")
+                .stationNumber("newNumber")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders
@@ -131,7 +142,10 @@ public class FirestationControllerIntegrationTest {
     public void testPutUnknownFirestation() throws Exception {
 
         //GIVEN
-        Firestation firestation = new Firestation("newAddress","newNumber");
+        Firestation firestation = Firestation.builder()
+                .address("newAddress")
+                .stationNumber("newNumber")
+                .build();
         //THEN
         mockMvc.perform( MockMvcRequestBuilders
                 .put("/firestation")
@@ -153,6 +167,34 @@ public class FirestationControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET request (firestation?stationNumber=<station_number) with an exiting station number must return an HTTP 200 response")
+    public void testGetPersonInfoByStationNumber() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/firestation?stationNumber=1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.personDto[0].firstName", is("Peter")))
+                .andExpect(jsonPath("$.personDto[0].lastName", is("Duncan")))
+                .andExpect(jsonPath("$.personDto[0].address", is("644 Gershwin Cir 97451 Culver")))
+                .andExpect(jsonPath("$.personDto[0].phone", is("841-874-6512")))
+                .andExpect(jsonPath("countPersonAdultChildDto.numberOfAdults", is(5)))
+                .andExpect(jsonPath("countPersonAdultChildDto.numberOfChildren", is(1)));
+    }
+
+    @Test
+    @DisplayName("GET request (firestation?stationNumber=<station_number) with an unknown station number must return an HTTP 404 response")
+    public void testGetPersonInfoByUnknownStationNumber() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/firestation?stationNumber=6"))
+                .andExpect(status().isNotFound());
     }
 
 }

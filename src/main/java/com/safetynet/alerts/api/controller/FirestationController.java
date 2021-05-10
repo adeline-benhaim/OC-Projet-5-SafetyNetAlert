@@ -3,6 +3,7 @@ package com.safetynet.alerts.api.controller;
 import com.safetynet.alerts.api.exceptions.FirestationAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.model.Firestation;
+import com.safetynet.alerts.api.model.dto.PersonInfoByFirestationDto;
 import com.safetynet.alerts.api.service.FirestationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,8 +25,9 @@ public class FirestationController {
     @Autowired
     FirestationService firestationService;
 
+
     @ApiOperation("Get the list of all firestations")
-    @GetMapping("/firestation")
+    @GetMapping("/firestations")
     public List<Firestation> getFirestations () {
         logger.info("REST : Get all firestations");
         return firestationService.getAllFirestations();
@@ -76,6 +78,19 @@ public class FirestationController {
     public void deleteFirestationByAddress(@PathVariable("address") String address) {
         logger.info("REST : Delete firestation address: {} ", address);
         firestationService.deleteFirestation(address);
+    }
+
+    @ApiOperation("Get a list of person and a count of adults and children covered by firestation found by a station number")
+    @GetMapping("/firestation")
+    public ResponseEntity<PersonInfoByFirestationDto> getFirestationsByStationNumber (@RequestParam("stationNumber") String stationNumber) {
+        logger.info("REST : Get a list of persons and a count of adults and children covered by firestation found by a station number");
+        try {
+            PersonInfoByFirestationDto personsFoundByStationNumber = firestationService.findPersonsByStationNumber(stationNumber);
+            return ResponseEntity.ok(personsFoundByStationNumber);
+        }catch (FirestationNotFoundException e) {
+            logger.error("REST : Get a list of persons and a count of adults and children covered by firestation found by a station number error because station number : {}" + " is not found", stationNumber);
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
 }

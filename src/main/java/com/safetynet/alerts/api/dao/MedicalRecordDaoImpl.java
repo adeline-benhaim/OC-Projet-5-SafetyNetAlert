@@ -68,6 +68,6 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
     @Override
     public void delete(String firstName, String lastName) {
     List<MedicalRecord> medicalRecords = dataSource.getAllMedicalRecords();
-    medicalRecords.removeIf(elem -> elem.firstName.equalsIgnoreCase(firstName) && elem.lastName.equalsIgnoreCase(lastName));
+    medicalRecords.removeIf(elem -> elem.getFirstName().equalsIgnoreCase(firstName) && elem.getLastName().equalsIgnoreCase(lastName));
     }
 }
