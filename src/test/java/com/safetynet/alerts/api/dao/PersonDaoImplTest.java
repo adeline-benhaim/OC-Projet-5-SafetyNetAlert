@@ -14,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class PersonDaoImplTest {
@@ -82,15 +81,26 @@ class PersonDaoImplTest {
 
         // GIVEN
         Mockito.when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
+        int sizeListBeforeSave = dataSourceTest.getPersonsMocked().size();
+
 
         // WHEN
-        Person person = new Person("first name", "last name", "address",null,null,null,null); // doesn't exist on dataSource
-        personDao.save(person);
+        Person person = Person.builder()
+                .firstName("first name")
+                .lastName("last name")
+                .address("address")
+                .build(); // doesn't exist on dataSource
+        Person savePerson = personDao.save(person);
+        int sizeListAfterSave = dataSourceTest.getPersonsMocked().size();
+
 
         // THEN
-        assertEquals("first name", dataSourceTest.getPersonsMocked().get(3).getFirstName());
-        assertEquals("last name", dataSourceTest.getPersonsMocked().get(3).getLastName());
-        assertEquals("address", dataSourceTest.getPersonsMocked().get(3).getAddress());
+        Person personTest = dataSourceTest.getPersonsMocked().get(3);
+        assertEquals(savePerson.getFirstName(), personTest.getFirstName());
+        assertEquals(savePerson.getLastName(), personTest.getLastName());
+        assertEquals(savePerson.getAddress(), personTest.getAddress());
+        assertTrue(sizeListBeforeSave < sizeListAfterSave);
+        assertEquals(sizeListBeforeSave + 1, sizeListAfterSave);
     }
 
     @Test
@@ -99,15 +109,32 @@ class PersonDaoImplTest {
 
         // GIVEN
         Mockito.when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
+        int sizeListBeforeSave = dataSourceTest.getPersonsMocked().size();
+
 
         // WHEN
-        Person person1 = new Person("first name 1", "last name 1", "address 5",null,null,null,null); // already exist on index 0 in dataSource
-        personDao.save(person1);
+        Person person1 = Person.builder()
+                .firstName("first name 1")
+                .lastName("last name 1")
+                .address("address 5")
+                .phone("phone 5")
+                .email("email 5")
+                .zip("zip 5")
+                .city("city 5")
+                .build(); // already exist on index 0 in dataSource
+        Person savePerson = personDao.save(person1);
+        int sizeListAfterSave = dataSourceTest.getPersonsMocked().size();
 
         // THEN
-        assertEquals("first name 1", dataSourceTest.getPersonsMocked().get(0).getFirstName());
-        assertEquals("last name 1", dataSourceTest.getPersonsMocked().get(0).getLastName());
-        assertEquals("address 5", dataSourceTest.getPersonsMocked().get(0).getAddress());
+        Person personTest = dataSourceTest.getPersonsMocked().get(0);
+        assertEquals(savePerson.getFirstName(), personTest.getFirstName());
+        assertEquals(savePerson.getLastName(), personTest.getLastName());
+        assertEquals("address 5", personTest.getAddress());
+        assertEquals("phone 5", personTest.getPhone());
+        assertEquals("email 5", personTest.getEmail());
+        assertEquals("zip 5", personTest.getZip());
+        assertEquals("city 5", personTest.getCity());
+        assertEquals(sizeListBeforeSave, sizeListAfterSave);
     }
 
     @Test
@@ -116,17 +143,16 @@ class PersonDaoImplTest {
 
         // GIVEN
         Mockito.when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
-        Person person = new Person("first name 5", "last name 5", "phone 5",null,null,null,null);
-        personDao.save(person);
         int sizeListBeforeDelete = dataSourceTest.getPersonsMocked().size();
 
         // WHEN
-        personDao.delete(person.firstName,person.lastName);
+        Person personToDelete = dataSourceTest.getPersonsMocked().get(0);
+        personDao.delete(personToDelete.getFirstName(),personToDelete.getLastName());
         int sizeListAfterDelete = dataSourceTest.getPersonsMocked().size();
 
         // THEN
-        assertEquals(4, sizeListBeforeDelete);
-        assertEquals(3, sizeListAfterDelete);
+        assertTrue(sizeListBeforeDelete > sizeListAfterDelete);
+        assertEquals(sizeListBeforeDelete - 1, sizeListAfterDelete);
 
     }
 

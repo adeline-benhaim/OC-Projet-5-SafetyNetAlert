@@ -32,7 +32,6 @@ public class PersonControllerIntegrationTest {
         dataSource.init();
     }
 
-
     @Test
     @DisplayName("GET request (/person) must return an HTTP 200 response")
     public void testGetPersons() throws Exception {
@@ -74,7 +73,11 @@ public class PersonControllerIntegrationTest {
     public void testPostANewPerson() throws Exception {
 
         //GIVEN
-        Person person = new Person("first name", "last name", "1509 Culver St", null, null, null, null);
+        Person person = Person.builder()
+                .firstName("first name")
+                .lastName("last name")
+                .address("1509 Culver St")
+                .build();
 
         //THEN
         mockMvc.perform(MockMvcRequestBuilders
@@ -91,7 +94,10 @@ public class PersonControllerIntegrationTest {
     public void testPostPersonAlreadyExisting() throws Exception {
 
         //GIVEN
-        Person person = new Person("Tenley", "Boyd", null, null, null, null, null);
+        Person person = Person.builder()
+                .firstName("Tenley")
+                .lastName("Boyd")
+                .build();
 
         //THEN
         mockMvc.perform(MockMvcRequestBuilders
@@ -107,7 +113,15 @@ public class PersonControllerIntegrationTest {
     public void testPutExistingPerson() throws Exception {
 
         //GIVEN
-        Person person = new Person("Tenley", "Boyd", "new address", "new city", "new zip", "new phone", "new email");
+        Person person = Person.builder()
+                .firstName("Tenley")
+                .lastName("Boyd")
+                .phone("new phone")
+                .zip("new zip")
+                .address("new address")
+                .city("new city")
+                .email("new email")
+                .build();
 
         //THEN
         mockMvc.perform(MockMvcRequestBuilders
@@ -124,7 +138,15 @@ public class PersonControllerIntegrationTest {
     public void testPutAUnknownPerson() throws Exception {
 
         //GIVEN
-        Person person = new Person("Unknown person", "Boyd", "new address", "new city", "new zip", "new phone", "new email");
+        Person person = Person.builder()
+                .firstName("Unknown person")
+                .lastName("Boyd")
+                .phone("new phone")
+                .zip("new zip")
+                .address("new address")
+                .city("new city")
+                .email("new email")
+                .build();
 
 
         //THEN

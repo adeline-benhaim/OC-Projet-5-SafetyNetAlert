@@ -32,13 +32,13 @@ public class FirestationControllerTest {
 
 
     @Test
-    @DisplayName("GET request (/firestation) must return an HTTP 200 response")
+    @DisplayName("GET request (/firestations) must return an HTTP 200 response")
     public void testGetFirestations() throws Exception {
 
         //GIVEN
 
         //THEN
-        mockMvc.perform(get("/firestation"))
+        mockMvc.perform(get("/firestations"))
                 .andExpect(status().isOk());
     }
 
@@ -70,7 +70,10 @@ public class FirestationControllerTest {
     public void testPostFirestation() throws Exception {
 
         //GIVEN
-        Firestation firestation = new Firestation("address","number");
+        Firestation firestation = Firestation.builder()
+                .address("address")
+                .stationNumber("number")
+                .build();
         when(firestationService.createNewFirestation(firestation)).thenReturn(null);
 
         //THEN
@@ -104,7 +107,10 @@ public class FirestationControllerTest {
     public void testPutFirestation() throws Exception {
 
         //GIVEN
-        Firestation firestation = new Firestation("address","number");
+        Firestation firestation = Firestation.builder()
+                .address("address")
+                .stationNumber("number")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders
@@ -136,7 +142,10 @@ public class FirestationControllerTest {
     public void testDeleteFirestationByAddress() throws Exception {
 
         //GIVEN
-        Firestation firestation = new Firestation("address","number");
+        Firestation firestation = Firestation.builder()
+                .address("address")
+                .stationNumber("number")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders
@@ -147,5 +156,27 @@ public class FirestationControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("GET request (firestation?stationNumber=<station_number) with an exiting station number must return an HTTP 200 response")
+    public void testGetPersonInfoByStationNumber() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/firestation?stationNumber=1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET request (firestation?stationNumber=<station_number) with an unknown station number must return an HTTP 404 response")
+    public void testGetPersonInfoByUnknownStationNumber() throws Exception {
+
+        //GIVEN
+        given(firestationService.findPersonsByStationNumber("6")).willThrow(new FirestationNotFoundException("REST : Get a list of persons and a count of adults and children covered by firestation found by a station number error because station number is not found"));
+
+        //THEN
+        mockMvc.perform(get("/firestation?stationNumber=6"))
+                .andExpect(status().isNotFound());
+    }
 
 }

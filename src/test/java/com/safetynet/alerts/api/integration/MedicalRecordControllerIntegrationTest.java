@@ -74,7 +74,11 @@ public class MedicalRecordControllerIntegrationTest {
     public void testPostMedicalRecord() throws Exception {
 
         //GIVEN
-        MedicalRecord medicalRecord = new MedicalRecord("first name","last name","birthdate",null,null);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("first name")
+                .lastName("last name")
+                .birthdate("birthdate")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders
@@ -91,7 +95,10 @@ public class MedicalRecordControllerIntegrationTest {
     public void testPostMedicalRecordAlreadyExisting() throws Exception {
 
         //GIVEN
-        MedicalRecord medicalRecord = new MedicalRecord("John","Boyd",null,null,null);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("John")
+                .lastName("Boyd")
+                .build();
 
 
         //THEN
@@ -108,7 +115,11 @@ public class MedicalRecordControllerIntegrationTest {
     public void testPutMedicalRecord() throws Exception {
 
         //GIVEN
-        MedicalRecord medicalRecord = new MedicalRecord("John","Boyd","newBirthdate",null,null);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("John")
+                .lastName("Boyd")
+                .birthdate("newBirthdate")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders
@@ -125,7 +136,11 @@ public class MedicalRecordControllerIntegrationTest {
     public void testPutUnknownMedicalRecord() throws Exception {
 
         //GIVEN
-        MedicalRecord medicalRecord = new MedicalRecord("Unknown name","Boyd","newBirthdate",null,null);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .firstName("Unknown name")
+                .lastName("Boyd")
+                .birthdate("newBirthdate")
+                .build();
 
         //THEN
         mockMvc.perform( MockMvcRequestBuilders

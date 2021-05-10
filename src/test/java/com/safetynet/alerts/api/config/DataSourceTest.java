@@ -19,9 +19,33 @@ public class DataSourceTest {
     List<MedicalRecord> medicalRecordsMocked = new ArrayList<>();
 
     public List<Person> getAllPersonMocked() {
-        Person person1 = new Person("first name 1", "last name 1", "phone 1", "zip 1", "address 1", "city 1", "email 1");
-        Person person2 = new Person("first name 2", "last name 2", "phone 2", "zip 2", "address 2", "city 2", "email 2");
-        Person person3 = new Person("first name 3", "last name 3", "phone 3", "zip 3", "address 3", "city 3", "email 3");
+        Person person1 = Person.builder()
+                .firstName("first name 1")
+                .lastName("last name 1")
+                .phone("phone 1")
+                .zip("zip 1")
+                .address("address 1")
+                .city("city 1")
+                .email("email 1")
+                .build();
+        Person person2 = Person.builder()
+                .firstName("first name 2")
+                .lastName("last name 2")
+                .phone("phone 2")
+                .zip("zip 2")
+                .address("address 2")
+                .city("city 2")
+                .email("email 2")
+                .build();
+        Person person3 = Person.builder()
+                .firstName("first name 3")
+                .lastName("last name 3")
+                .phone("phone 3")
+                .zip("zip 3")
+                .address("address 3")
+                .city("city 3")
+                .email("email 3")
+                .build();
         personsMocked.add(person1);
         personsMocked.add(person2);
         personsMocked.add(person3);
@@ -29,9 +53,18 @@ public class DataSourceTest {
     }
 
     public List<Firestation> getAllFirestationMocked() {
-        Firestation firestation1 = new Firestation("address 1", "number 1");
-        Firestation firestation2 = new Firestation("address 2", "number 2");
-        Firestation firestation3 = new Firestation("address 1", "number 3");
+        Firestation firestation1 = Firestation.builder()
+                .address("address 1")
+                .stationNumber("number 1")
+                .build();
+        Firestation firestation2 = Firestation.builder()
+                .address("address 2")
+                .stationNumber("number 2")
+                .build();
+        Firestation firestation3 = Firestation.builder()
+                .address("address 3")
+                .stationNumber("number 3")
+                .build();
         firestationsMocked.add(firestation1);
         firestationsMocked.add(firestation2);
         firestationsMocked.add(firestation3);
@@ -39,9 +72,27 @@ public class DataSourceTest {
     }
 
     public List<MedicalRecord> getAllMedicalRecordMocked() {
-        MedicalRecord medicalRecord1 = new MedicalRecord("first name 1", "last name 1", "birthdate 1", "medications 1", "allergies 1");
-        MedicalRecord medicalRecord2 = new MedicalRecord("first name 2", "last name 2", "birthdate 2", "medications 2", "allergies 2");
-        MedicalRecord medicalRecord3 = new MedicalRecord("first name 3", "last name 3", "birthdate 3", "medications 3", "allergies 3");
+        MedicalRecord medicalRecord1 = MedicalRecord.builder()
+                .firstName("first name 1")
+                .lastName("last name 1")
+                .birthdate("birthdate 1")
+                .medications("medications 1")
+                .allergies("allergies 1")
+                .build();
+        MedicalRecord medicalRecord2 = MedicalRecord.builder()
+                .firstName("first name 2")
+                .lastName("last name 2")
+                .birthdate("birthdate 2")
+                .medications("medications 2")
+                .allergies("allergies 2")
+                .build();
+        MedicalRecord medicalRecord3 = MedicalRecord.builder()
+                .firstName("first name 3")
+                .lastName("last name 3")
+                .birthdate("birthdate 3")
+                .medications("medications 3")
+                .allergies("allergies 3")
+                .build();
         medicalRecordsMocked.add(medicalRecord1);
         medicalRecordsMocked.add(medicalRecord2);
         medicalRecordsMocked.add(medicalRecord3);
@@ -67,21 +118,3 @@ public class DataSourceTest {
     }
 
 }
-
-//        Person person1 = Person.builder()
-//                .firstName("first name 1")
-//                .lastName("last name 1")
-//                .email("email1@localhost.com")
-//                .build();
-//        Person person2 = Person.builder()
-//                .firstName("first name 2")
-//                .lastName("last name 2")
-//                .email("email2@localhost.com")
-//                .build();
-//        Person person3 = Person.builder()
-//                .firstName("first name 3")
-//                .lastName("last name 3")
-//                .email("email3@localhost.com")
-//                .build();
-//        List<Person> personsMocked = Arrays.asList(person1, person2, person3);
-//        Mockito.when(dataSource.getAllPersons()).thenReturn(personsMocked);

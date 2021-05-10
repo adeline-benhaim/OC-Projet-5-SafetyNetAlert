@@ -1,6 +1,7 @@
 package com.safetynet.alerts.api.service;
 
 import com.safetynet.alerts.api.model.Firestation;
+import com.safetynet.alerts.api.model.dto.PersonInfoByFirestationDto;
 
 import java.util.List;
 
@@ -40,5 +41,12 @@ public interface FirestationService {
      * @param address of firestation to delete
      */
     void deleteFirestation(String address);
+
+    /**
+     * Find a list of persons covered by the station number sought and a count of adults and children concerned
+     * @param stationNumber for which persons are sought
+     * @return a list of persons covered by the station number and a count of adults and children concerned
+     */
+    PersonInfoByFirestationDto findPersonsByStationNumber(String stationNumber);
 
 }

@@ -4,6 +4,7 @@ import com.safetynet.alerts.api.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.api.model.Person;
 import com.safetynet.alerts.api.service.PersonService;
+import com.safetynet.alerts.api.service.PersonServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class PersonControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private PersonService personService;
+    private PersonServiceImpl personService;
 
     private Person person;
 
@@ -72,7 +73,10 @@ public class PersonControllerTest {
     public void testPostANewPerson() throws Exception {
 
         //GIVEN
-        Person person = new Person("first name", "last name", null, null, null, null, null);
+        Person person = Person.builder()
+                .firstName("first name")
+                .lastName("last name")
+                .build();
         when(personService.createNewPerson(person)).thenReturn(null);
 
         //THEN
@@ -105,7 +109,10 @@ public class PersonControllerTest {
     public void testPutExistingPerson() throws Exception {
 
         //GIVEN
-        Person person = new Person("first name 1", "last name 1", null, null, null, null, null);
+        Person person = Person.builder()
+                .firstName("first name 1")
+                .lastName("last name 1")
+                .build();
 
         //THEN
         mockMvc.perform(MockMvcRequestBuilders
@@ -121,7 +128,6 @@ public class PersonControllerTest {
 //    public void testPutAUnknownPerson() throws Exception {
 //
 //        //GIVEN
-//        Person person = null;
 //        given(personService.updatePerson(person)).willThrow(new PersonNotFoundException("Trying to update non existing person"));
 //
 //        //THEN
@@ -138,7 +144,10 @@ public class PersonControllerTest {
     public void testDeletePerson() throws Exception {
 
         //GIVEN
-        Person person = new Person("first name", "last name", null, null, null, null, null);
+        Person person = Person.builder()
+                .firstName("firstname")
+                .lastName("lastname")
+                .build();
 
         //THEN
         mockMvc.perform(MockMvcRequestBuilders
