@@ -1,6 +1,7 @@
 package com.safetynet.alerts.api.service;
 
 import com.safetynet.alerts.api.model.Person;
+import com.safetynet.alerts.api.model.dto.ChildAlertDto;
 import com.safetynet.alerts.api.model.dto.ListPersonAdultChildDto;
 
 import java.util.List;
@@ -56,4 +57,18 @@ public interface PersonService {
      * @return a list of adults and a list of children
      */
     ListPersonAdultChildDto findChildrenListAndAdultList(List<Person> personList);
+
+    /**
+     * Find a list of persons covered by the address sought
+     * @param address for which persons are sought
+     * @return a global list of persons living at the address sought
+     */
+    List<Person> findGlobalListOfPersonsByAddress(String address);
+
+    /**
+     *  Find a list of children living at the address sought with a list of other house hold members
+     * @param address for which child is sought
+     * @return a list of children (firstname, lastname, age) living at the address sought with a list of other house hold members
+     */
+    List<ChildAlertDto> findChildrenByAddress(String address);
 }

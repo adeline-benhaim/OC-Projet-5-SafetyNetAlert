@@ -171,4 +171,31 @@ public class PersonControllerIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("GET request (childAlert?address=<address>) with an exiting address must return an HTTP 200 response")
+    public void testGetChildAlertByAddress() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/childAlert?address=1509 Culver St"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is("Tenley")))
+                .andExpect(jsonPath("$[0].lastName", is("Boyd")))
+                .andExpect(jsonPath("$[0].age", is(9)))
+                .andExpect(jsonPath("$[0].houseHoldMembers[0].lastName", is("Boyd")))
+                .andExpect(jsonPath("$[0].houseHoldMembers[0].address", is("1509 Culver St")));
+    }
+
+    @Test
+    @DisplayName("GET request (childAlert?address=<address>) with an unknown address must return an HTTP 404 response")
+    public void testGetChildAlertByUnknownAddress() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/childAlert?address=unknown"))
+                .andExpect(status().isNotFound());
+    }
 }

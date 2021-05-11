@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 @Builder
@@ -26,6 +27,8 @@ public class Person {
     private int age;
     @JsonIgnore
     private String birthdate;
+    @JsonIgnore
+    private List<Person> houseHoldMembers;
 
     public void calculateAge(String birthdate) {
             Locale.setDefault(Locale.FRANCE);
