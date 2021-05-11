@@ -1,7 +1,6 @@
 package com.safetynet.alerts.api.service;
 
 import com.safetynet.alerts.api.dao.FirestationDao;
-import com.safetynet.alerts.api.dao.PersonDao;
 import com.safetynet.alerts.api.exceptions.FirestationAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.mapper.PersonMapper;
@@ -26,14 +25,10 @@ public class FirestationServiceImpl implements FirestationService {
     @Autowired
     FirestationDao firestationDao;
     @Autowired
-    PersonDao personDao;
-    @Autowired
     PersonMapper personMapper;
     @Autowired
     PersonServiceImpl personService;
 
-
-    CountPersonAdultChildDto countPersonAdultChildDto;
 
     /**
      * Find all firestations

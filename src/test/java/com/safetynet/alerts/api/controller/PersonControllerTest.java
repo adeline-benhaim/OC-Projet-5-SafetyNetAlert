@@ -1,5 +1,6 @@
 package com.safetynet.alerts.api.controller;
 
+import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.api.model.Person;
@@ -158,5 +159,27 @@ public class PersonControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("GET request (childAlert?address=<address>) with an exiting address must return an HTTP 200 response")
+    public void testGetChildAlertByAddress() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/childAlert?address=address"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET request (childAlert?address=<address>) with an unknown address must return an HTTP 404 response")
+    public void testGetChildAlertByUnknownAddress() throws Exception {
+
+        //GIVEN
+        given(personService.findChildrenByAddress("unknown")).willThrow(new PersonNotFoundException("REST : Get a list of children and a list of others household members found by address error because address is not found"));
+
+        //THEN
+        mockMvc.perform(get("/childAlert?address=unknown"))
+                .andExpect(status().isNotFound());
+    }
 
 }

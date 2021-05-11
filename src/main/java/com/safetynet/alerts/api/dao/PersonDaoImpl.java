@@ -1,7 +1,6 @@
 package com.safetynet.alerts.api.dao;
 
 import com.safetynet.alerts.api.config.DataSource;
-import com.safetynet.alerts.api.model.Firestation;
 import com.safetynet.alerts.api.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

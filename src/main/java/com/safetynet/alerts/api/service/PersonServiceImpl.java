@@ -6,10 +6,11 @@ import com.safetynet.alerts.api.dao.PersonDao;
 import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
+import com.safetynet.alerts.api.mapper.PersonMapper;
 import com.safetynet.alerts.api.model.Firestation;
 import com.safetynet.alerts.api.model.MedicalRecord;
 import com.safetynet.alerts.api.model.Person;
-import com.safetynet.alerts.api.model.dto.ListPersonAdultChildDto;
+import com.safetynet.alerts.api.model.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class PersonServiceImpl implements PersonService {
     MedicalRecordDao medicalRecordDao;
     @Autowired
     FirestationDao firestationDao;
+
 
     /**
      * Find all persons
@@ -170,6 +172,61 @@ public class PersonServiceImpl implements PersonService {
             logger.error("Error to get a list of adults and children because list of person is empty");
             throw new FirestationNotFoundException("Error to get a list of adults and children because list of person is empty");
         }
+    }
+
+    /**
+     * Find a list of persons living at the address sought
+     *
+     * @param address for which persons are sought
+     * @return a global list of persons living at the address sought
+     */
+    @Override
+    public List<Person> findGlobalListOfPersonsByAddress(String address) {
+        logger.info("Get list of persons living at the address : {}", address);
+        List<Person> personList = personDao.findPersons();
+        List<Person> personListByAddress = new ArrayList<>();
+        for (Person person : personList) {
+            if (person.getAddress().equalsIgnoreCase(address)) {
+                personListByAddress.add(person);
+            }
+        }
+        if (personListByAddress.isEmpty()) {
+            logger.error("Get a list of persons by address error because the address :  {}  is not found", address);
+            throw new PersonNotFoundException("Get a list of persons by address error because the address :" + address + " is not found");
+        }
+        return personListByAddress;
+    }
+
+    /**
+     * Find a list of children living at the address sought with a list of other house hold members
+     *
+     * @param address for which child is sought
+     * @return a list of children (firstname, lastname, age) living at the address sought with a list of other house hold members
+     */
+    @Override
+    public List<ChildAlertDto> findChildrenByAddress(String address) {
+        logger.info("Get child alert info list by address : {}", address);
+        List<Person> personList = findGlobalListOfPersonsByAddress(address);
+        if (!personList.isEmpty()) {
+            ListPersonAdultChildDto adultAndChildList = findChildrenListAndAdultList(personList);
+            List<Person> childList = adultAndChildList.getListOfChild();
+            List<Person> adultList = adultAndChildList.getListOfAdult();
+            for (Person child : childList) {
+                List<Person> houseHoldMembersList = new ArrayList<>();
+                for (Person adult : adultList) {
+                    if (child.getLastName().equals(adult.getLastName())) {
+                        houseHoldMembersList.add(adult);
+                        child.setHouseHoldMembers(houseHoldMembersList);
+                    }
+                }
+            }
+            return childList
+                    .stream()
+                    .map(PersonMapper::convertToChildAlertDto)
+                    .collect(Collectors.toList());
+        }
+        logger.error("Get child alert info list by address error because the address :  {}  is not found", address);
+        throw new PersonNotFoundException("Get child alert info list by address error because the address : " + address + " is not found");
     }
 }
 

@@ -263,5 +263,34 @@ public class PersonServiceImplTest {
         assertThrows(FirestationNotFoundException.class, () -> personService.findChildrenListAndAdultList(personList));
     }
 
+    @Test
+    @DisplayName("Find a global list of persons found by address")
+    void findListPersonsByAddressTest() {
+
+        //GIVEN
+        String address = "address";
+        List<Person> personList = new ArrayList<>();
+        Person person = Person.builder()
+                .firstName("firstname")
+                .lastName("lastname")
+                .address("address").build();
+        personList.add(person);
+        Person person1 = Person.builder()
+                .firstName("firstname1")
+                .lastName("lastname1")
+                .address("address1").build();
+        personList.add(person1);
+        when(personDao.findPersons()).thenReturn(personList);
+
+        //WHEN
+        List<Person> personListTest = personService.findGlobalListOfPersonsByAddress(address);
+
+        //THEN
+        assertTrue(personListTest.contains(person));
+        assertEquals(1,personListTest.size());
+        assertEquals(personListTest.get(0).getAddress(), person.getAddress());
+        assertThrows(PersonNotFoundException.class, () -> personService.findGlobalListOfPersonsByAddress("unknown"));
+    }
+
 }
 
