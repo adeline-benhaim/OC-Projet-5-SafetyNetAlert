@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class MedicalRecordDaoImpl implements MedicalRecordDao {
+
     @Autowired
     private DataSource dataSource;
 

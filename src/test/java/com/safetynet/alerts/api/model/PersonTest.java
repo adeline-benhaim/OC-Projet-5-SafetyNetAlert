@@ -138,6 +138,8 @@ public class PersonTest {
         person.setAddress("address");
         person.setCity("city");
         person.setEmail("email");
+        person.setBirthdate("birthdate");
+        person.setAge(0);
 
         //THEN
         assertThat(person.getFirstName()).isEqualTo("firstName");
@@ -147,5 +149,7 @@ public class PersonTest {
         assertThat(person.getAddress()).isEqualTo("address");
         assertThat(person.getCity()).isEqualTo("city");
         assertThat(person.getEmail()).isEqualTo("email");
+        assertThat(person.getBirthdate()).isEqualTo("birthdate");
+        assertThat(person.getAge()).isEqualTo(0);
     }
 }

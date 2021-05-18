@@ -1,17 +1,20 @@
 package com.safetynet.alerts.api.dao;
 
 import com.safetynet.alerts.api.config.DataSource;
+import com.safetynet.alerts.api.model.Firestation;
 import com.safetynet.alerts.api.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonDaoImpl implements PersonDao {
+
     @Autowired
     private DataSource dataSource;
-
 
     /**
      * Find all persons with their firstname, lastname, address, city, zip, email
@@ -20,6 +23,52 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public List<Person> findPersons() {
         return dataSource.getAllPersons();
+    }
+
+    /**
+     * Find a list of persons found by address
+     * @param address for which persons are sought
+     * @return a list of persons living at the address sought
+     */
+    @Override
+    public List<Person> findByAddress(String address) {
+        List<Person> personList = dataSource.getAllPersons();
+        List<Person> personListByAddress = new ArrayList<>();
+        for (Person person : personList) {
+            if (person.getAddress().equalsIgnoreCase(address)) {
+                personListByAddress.add(person);
+            }
+        }
+        if (personListByAddress.isEmpty()) {
+            return null;
+        }
+        return personListByAddress;
+    }
+
+    /**
+     * Find a list of persons covered by the station number sought
+     *
+     * @param stationNumber of firestation for which persons are sought
+     * @return a global list of persons covered by the station number
+     */
+    @Override
+    public List<Person> findByStationNumber(String stationNumber) {
+        List<Firestation> firestationList = dataSource.getAllFirestation();
+        List<String> addresses = firestationList
+                .stream()
+                .filter(firestation -> firestation.getStationNumber().equals(stationNumber))
+                .map(Firestation::getAddress)
+                .collect(Collectors.toList());
+        if (!addresses.isEmpty()) {
+            List<Person> persons = dataSource.getAllPersons();
+            List<Person> personsByStationNumber = new ArrayList<>();
+            for (Person person : persons) {
+                if (addresses.contains(person.getAddress())) personsByStationNumber.add(person);
+            }
+            return personsByStationNumber;
+        } else {
+            return null;
+        }
     }
 
     /**

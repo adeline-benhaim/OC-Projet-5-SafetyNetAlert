@@ -77,7 +77,7 @@ public class FirestationControllerTest {
         when(firestationService.createNewFirestation(firestation)).thenReturn(null);
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .post("/firestation")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ public class FirestationControllerTest {
         given(firestationService.createNewFirestation(firestation)).willThrow(new FirestationAlreadyExistException("Create firestation error because person already exist"));
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .post("/firestation")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -113,7 +113,7 @@ public class FirestationControllerTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .put("/firestation")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -148,35 +148,12 @@ public class FirestationControllerTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .delete("/firestation/address")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("GET request (firestation?stationNumber=<station_number) with an exiting station number must return an HTTP 200 response")
-    public void testGetPersonInfoByStationNumber() throws Exception {
-
-        //GIVEN
-
-        //THEN
-        mockMvc.perform(get("/firestation?stationNumber=1"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("GET request (firestation?stationNumber=<station_number) with an unknown station number must return an HTTP 404 response")
-    public void testGetPersonInfoByUnknownStationNumber() throws Exception {
-
-        //GIVEN
-        given(firestationService.findPersonsByStationNumber("6")).willThrow(new FirestationNotFoundException("REST : Get a list of persons and a count of adults and children covered by firestation found by a station number error because station number is not found"));
-
-        //THEN
-        mockMvc.perform(get("/firestation?stationNumber=6"))
-                .andExpect(status().isNotFound());
     }
 
 }

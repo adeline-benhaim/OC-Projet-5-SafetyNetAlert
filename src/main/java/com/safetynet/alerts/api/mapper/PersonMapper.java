@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class PersonMapper {
 
-    public PersonDto convertToPersonDto(Person person) {
+    public static PersonDto convertToPersonDto(Person person) {
         return PersonDto.builder()
                 .firstName(person.getFirstName())
                 .lastName(person.getLastName())

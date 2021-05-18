@@ -95,7 +95,7 @@ public class MedicalRecordDaoImplTest {
         int sizeListAfterSave = dataSourceTest.getMedicalRecordsMocked().size();
 
         // THEN
-        MedicalRecord medicalRecordTest = dataSourceTest.getMedicalRecordsMocked().get(3);
+        MedicalRecord medicalRecordTest = dataSourceTest.getMedicalRecordsMocked().get(6);
         assertEquals(saveMedicalRecord.getFirstName(), medicalRecordTest.getFirstName());
         assertEquals(saveMedicalRecord.getLastName(), medicalRecordTest.getLastName());
         assertEquals(saveMedicalRecord.getBirthdate(), medicalRecordTest.getBirthdate());

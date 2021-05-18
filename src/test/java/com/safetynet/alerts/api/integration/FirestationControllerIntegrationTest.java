@@ -169,32 +169,4 @@ public class FirestationControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    @DisplayName("GET request (firestation?stationNumber=<station_number) with an exiting station number must return an HTTP 200 response")
-    public void testGetPersonInfoByStationNumber() throws Exception {
-
-        //GIVEN
-
-        //THEN
-        mockMvc.perform(get("/firestation?stationNumber=1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.personDto[0].firstName", is("Peter")))
-                .andExpect(jsonPath("$.personDto[0].lastName", is("Duncan")))
-                .andExpect(jsonPath("$.personDto[0].address", is("644 Gershwin Cir 97451 Culver")))
-                .andExpect(jsonPath("$.personDto[0].phone", is("841-874-6512")))
-                .andExpect(jsonPath("countPersonAdultChildDto.numberOfAdults", is(5)))
-                .andExpect(jsonPath("countPersonAdultChildDto.numberOfChildren", is(1)));
-    }
-
-    @Test
-    @DisplayName("GET request (firestation?stationNumber=<station_number) with an unknown station number must return an HTTP 404 response")
-    public void testGetPersonInfoByUnknownStationNumber() throws Exception {
-
-        //GIVEN
-
-        //THEN
-        mockMvc.perform(get("/firestation?stationNumber=6"))
-                .andExpect(status().isNotFound());
-    }
-
 }

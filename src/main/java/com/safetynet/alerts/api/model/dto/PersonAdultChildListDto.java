@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class ListPersonAdultChildDto {
+public class PersonAdultChildListDto {
     public List<Person> listOfAdult;
     public List<Person> listOfChild;
 }

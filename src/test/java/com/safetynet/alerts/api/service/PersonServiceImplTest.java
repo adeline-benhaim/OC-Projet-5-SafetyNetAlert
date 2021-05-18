@@ -4,13 +4,9 @@ import com.safetynet.alerts.api.config.DataSourceTest;
 import com.safetynet.alerts.api.dao.FirestationDao;
 import com.safetynet.alerts.api.dao.MedicalRecordDao;
 import com.safetynet.alerts.api.dao.PersonDao;
-import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
-import com.safetynet.alerts.api.model.Firestation;
-import com.safetynet.alerts.api.model.MedicalRecord;
 import com.safetynet.alerts.api.model.Person;
-import com.safetynet.alerts.api.model.dto.ListPersonAdultChildDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,10 +16,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,16 +29,8 @@ public class PersonServiceImplTest {
 
     @Mock
     PersonDao personDao;
-
-    @Mock
-    FirestationDao firestationDao;
-
-    @Mock
-    MedicalRecordDao medicalRecordDao;
-
     @InjectMocks
     PersonServiceImpl personService;
-
     @InjectMocks
     DataSourceTest dataSourceTest;
 
@@ -176,121 +164,5 @@ public class PersonServiceImplTest {
         // THEN
         verify(personDao, Mockito.times(1)).delete("firstName", "lastName");
     }
-
-    @Test
-    @DisplayName("Find a global list of persons found by station number")
-    void findListPersonsByStationNumberTest() {
-
-        //GIVEN
-        String stationNumber = "0";
-        List<Person> personList = new ArrayList<>();
-        Person person = Person.builder()
-                .address("address").build();
-        personList.add(person);
-        Person person1 = Person.builder()
-                .address("address1").build();
-        personList.add(person1);
-        List<Firestation> firestationList = new ArrayList<>();
-        Firestation firestation = Firestation.builder().stationNumber("0").address("address").build();
-        firestationList.add(firestation);
-        Firestation firestation1 = Firestation.builder().stationNumber("1").address("address1").build();
-        firestationList.add(firestation1);
-        when(firestationDao.findFirestations()).thenReturn(firestationList);
-        when(personDao.findPersons()).thenReturn(personList);
-
-        //WHEN
-        List<Person> personListTest = personService.findGlobalListOfPersonsByStationNumber(stationNumber);
-        List<Person> personListTest1 = personService.findGlobalListOfPersonsByStationNumber("1");
-
-        //THEN
-            assertTrue(personListTest.contains(person));
-            assertEquals(personListTest.get(0).getAddress(), person.getAddress());
-            assertEquals(firestation.getAddress(), person.getAddress());
-            assertThrows(FirestationNotFoundException.class, () -> personService.findGlobalListOfPersonsByStationNumber("2"));
-            assertTrue(personListTest1.contains(person1));
-            assertEquals(personListTest1.get(0).getAddress(), person1.getAddress());
-            assertEquals(firestation1.getAddress(), person1.getAddress());
-    }
-
-    @Test
-    @DisplayName("Find a global list of persons by an unknown station number return not found exception")
-    void findListPersonsByUnknownStationNumberTest() {
-
-        //WHEN
-        String stationNumber = "number 11";
-
-        //THEN
-        assertThrows(FirestationNotFoundException.class, () -> personService.findGlobalListOfPersonsByStationNumber(stationNumber));
-    }
-
-    @Test
-    @DisplayName("Find a list of children and a list of adults from a list of persons")
-    void findChildrenListAndAdultListTest() {
-
-        //GIVEN
-        List<MedicalRecord> medicalRecordList = new ArrayList<>();
-        MedicalRecord medicalRecordAdult = MedicalRecord.builder()
-                .firstName("firstname").lastName("lastname").birthdate("12/28/1950").build();
-        medicalRecordList.add(medicalRecordAdult);
-        MedicalRecord medicalRecordChild = MedicalRecord.builder()
-                .firstName("firstname1").lastName("lastname1").birthdate("12/28/2015").build();
-        medicalRecordList.add(medicalRecordChild);
-        List<Person> personList = new ArrayList<>();
-        Person person = Person.builder()
-                .firstName("firstname").lastName("lastname").build();
-        personList.add(person);
-        Person person1 = Person.builder()
-                .firstName("firstname1").lastName("lastname1").build();
-        personList.add(person1);
-        when(medicalRecordDao.findMedicalRecords()).thenReturn(medicalRecordList);
-
-        //WHEN
-        ListPersonAdultChildDto personList1 = personService.findChildrenListAndAdultList(personList);
-
-        //THEN
-        assertTrue(personList1.getListOfAdult().contains(person));
-        assertTrue(personList1.getListOfChild().contains(person1));
-    }
-
-    @Test
-    @DisplayName("Find a list of children and a list of adults from a empty list of person return not found exception")
-    void findListsAdultAndChildFromEmptyListOfPersonTest() {
-
-        //WHEN
-        List<Person> personList = new ArrayList<>();
-
-        //THEN
-        assertThrows(FirestationNotFoundException.class, () -> personService.findChildrenListAndAdultList(personList));
-    }
-
-    @Test
-    @DisplayName("Find a global list of persons found by address")
-    void findListPersonsByAddressTest() {
-
-        //GIVEN
-        String address = "address";
-        List<Person> personList = new ArrayList<>();
-        Person person = Person.builder()
-                .firstName("firstname")
-                .lastName("lastname")
-                .address("address").build();
-        personList.add(person);
-        Person person1 = Person.builder()
-                .firstName("firstname1")
-                .lastName("lastname1")
-                .address("address1").build();
-        personList.add(person1);
-        when(personDao.findPersons()).thenReturn(personList);
-
-        //WHEN
-        List<Person> personListTest = personService.findGlobalListOfPersonsByAddress(address);
-
-        //THEN
-        assertTrue(personListTest.contains(person));
-        assertEquals(1,personListTest.size());
-        assertEquals(personListTest.get(0).getAddress(), person.getAddress());
-        assertThrows(PersonNotFoundException.class, () -> personService.findGlobalListOfPersonsByAddress("unknown"));
-    }
-
 }
 
