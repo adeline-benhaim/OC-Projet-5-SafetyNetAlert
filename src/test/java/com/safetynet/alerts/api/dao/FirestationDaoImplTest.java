@@ -86,14 +86,14 @@ public class FirestationDaoImplTest {
 
         // WHEN
         Firestation firestation = Firestation.builder()
-                .address("address")
-                .stationNumber("number")
+                .address("newAddress")
+                .stationNumber("newNumber")
                 .build();
         Firestation saveFirestation = firestationDao.save(firestation);
         int sizeListAfterSave = dataSourceTest.getFirestationsMocked().size();
 
         // THEN
-        Firestation firestationTest = dataSourceTest.getFirestationsMocked().get(3);
+        Firestation firestationTest = dataSourceTest.getFirestationsMocked().get(4);
         assertEquals(saveFirestation.getAddress(), firestationTest.getAddress());
         assertEquals(saveFirestation.getStationNumber(), firestationTest.getStationNumber());
         assertTrue(sizeListBeforeSave < sizeListAfterSave);

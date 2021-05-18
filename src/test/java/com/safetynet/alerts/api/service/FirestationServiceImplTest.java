@@ -2,17 +2,9 @@ package com.safetynet.alerts.api.service;
 
 import com.safetynet.alerts.api.config.DataSourceTest;
 import com.safetynet.alerts.api.dao.FirestationDao;
-import com.safetynet.alerts.api.dao.PersonDao;
-import com.safetynet.alerts.api.dao.PersonDaoImpl;
 import com.safetynet.alerts.api.exceptions.FirestationAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
-import com.safetynet.alerts.api.mapper.PersonMapper;
 import com.safetynet.alerts.api.model.Firestation;
-import com.safetynet.alerts.api.model.Person;
-import com.safetynet.alerts.api.model.dto.CountPersonAdultChildDto;
-import com.safetynet.alerts.api.model.dto.ListPersonAdultChildDto;
-import com.safetynet.alerts.api.model.dto.PersonDto;
-import com.safetynet.alerts.api.model.dto.PersonInfoByFirestationDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,11 +14,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,21 +26,10 @@ public class FirestationServiceImplTest {
 
     @Mock
     FirestationDao firestationDao;
-
     @InjectMocks
     FirestationServiceImpl firestationService;
-
-    @Mock
-    PersonServiceImpl personService;
-
     @InjectMocks
     DataSourceTest dataSourceTest;
-
-    @Mock
-    PersonMapper personMapper;
-
-    @Mock
-    PersonDao personDao;
 
     @BeforeEach
     void clear() {
@@ -179,49 +159,4 @@ public class FirestationServiceImplTest {
         // THEN
         verify(firestationDao, Mockito.times(1)).delete("address 1");
     }
-//
-//    @Test
-//    @DisplayName("Find a list of persons covered by the station number sought and a count of adults and children concerned")
-//    void personInfoByFirestationTest() {
-//
-//        // GIVEN
-//        List<Person> personList = new ArrayList<>();
-//        List<Person> adultList = new ArrayList<>();
-//        List<Person> childrenList = new ArrayList<>();
-//        Person person = Person.builder()
-//                .firstName("firstname").lastName("lastname").birthdate("01/01/192015").address("address").build();
-//        personList.add(person);
-//        childrenList.add(person);
-//        Person person1 = Person.builder()
-//                .firstName("firstname1").lastName("lastname1").birthdate("01/01/2020").address("address1").build();
-//        personList.add(person1);
-//        childrenList.add(person1);
-//        List<PersonDto> personDtoList = personList
-//                .stream()
-//                .map(person0 -> personMapper.convertToPersonDto(person0))
-//                .collect(Collectors.toList());
-//
-//        //WHEN
-//        when(personService.findChildrenListAndAdultList(personList)).thenReturn(ListPersonAdultChildDto.builder()
-//                .listOfAdult(adultList)
-//                .listOfChild(childrenList)
-//                .build());
-//        ListPersonAdultChildDto lists = personService.findChildrenListAndAdultList(personList);
-//        CountPersonAdultChildDto listSize = CountPersonAdultChildDto.builder()
-//                .numberOfChildren(lists.listOfChild.size())
-//                .numberOfAdults(lists.listOfAdult.size())
-//                .build();
-//        PersonInfoByFirestationDto personInfoByFirestationDto = PersonInfoByFirestationDto.builder().personDto(personDtoList).countPersonAdultChildDto(listSize).build();
-//        when(firestationService.findPersonsByStationNumber("number 1")).thenReturn(personInfoByFirestationDto);
-//
-//
-//        // THEN
-//        assertEquals(2, personInfoByFirestationDto.getCountPersonAdultChildDto().numberOfChildren);
-//        assertEquals(0, personInfoByFirestationDto.getCountPersonAdultChildDto().numberOfAdults);
-//
-//
-//    }
-
-
-
 }

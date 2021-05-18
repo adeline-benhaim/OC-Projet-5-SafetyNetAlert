@@ -1,10 +1,8 @@
 package com.safetynet.alerts.api.controller;
 
-import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.api.model.Person;
-import com.safetynet.alerts.api.model.dto.ChildAlertDto;
 import com.safetynet.alerts.api.service.PersonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +19,6 @@ import java.util.List;
 @RestController
 public class PersonController {
     private static final Logger logger = LoggerFactory.getLogger(PersonController.class);
-
 
     @Autowired
     private PersonService personService;
@@ -96,7 +93,6 @@ public class PersonController {
         }
     }
 
-
     /**
      * Delete a person find by firstname and lastname
      *
@@ -110,22 +106,4 @@ public class PersonController {
         personService.deletePerson(firstName, lastName);
     }
 
-    /**
-     * Get a list of children living at the address sought with a list of other house hold members
-     *
-     * @param address for which child is sought
-     * @return a list of children (firstname, lastname, age) living at the address sought with a list of other house hold members
-     */
-    @ApiOperation("Get a list of children and a list of others household members found by address")
-    @GetMapping("/childAlert")
-    public ResponseEntity<List<ChildAlertDto>> getChildrenByAddress (@RequestParam("address") String address) {
-        logger.info("REST : Get a list of children and a list of others household members found by address");
-        try {
-            List<ChildAlertDto> childAlertDtoList = personService.findChildrenByAddress(address);
-            return ResponseEntity.ok(childAlertDtoList);
-        }catch (PersonNotFoundException e) {
-            logger.error("REST : Get a list of children and a list of others household members found by address error because address : {}" + " is not found", address);
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
 }

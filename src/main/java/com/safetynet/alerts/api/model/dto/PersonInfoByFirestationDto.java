@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Builder
 @Getter
@@ -12,5 +13,5 @@ import java.util.List;
 public class PersonInfoByFirestationDto {
 
     private List<PersonDto> personDto;
-    private CountPersonAdultChildDto countPersonAdultChildDto;
+    private Map<String, Integer> countPersonAdultChildDto;
 }

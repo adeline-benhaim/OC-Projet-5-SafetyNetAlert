@@ -14,6 +14,21 @@ public interface PersonDao {
     List<Person> findPersons();
 
     /**
+     * Find a list of persons found by address
+     * @param address for which persons are sought
+     * @return a list of persons living at the address sought
+     */
+    List<Person> findByAddress(String address);
+
+    /**
+     * Find a list of persons covered by the station number sought
+     *
+     * @param stationNumber of firestation for which persons are sought
+     * @return a global list of persons covered by the station number
+     */
+    List<Person> findByStationNumber(String stationNumber);
+
+    /**
      * Find person by firstname and lastname
      * @param firstName of the wanted person
      * @param lastName of the wanted person

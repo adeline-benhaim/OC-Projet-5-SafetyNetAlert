@@ -46,9 +46,39 @@ public class DataSourceTest {
                 .city("city 3")
                 .email("email 3")
                 .build();
+        Person person4 = Person.builder()
+                .firstName("Pierre")
+                .lastName("Dupond")
+                .phone("phone 4")
+                .zip("zip 4")
+                .address("address")
+                .city("city 4")
+                .email("email 4")
+                .build();
+        Person person5 = Person.builder()
+                .firstName("Paul")
+                .lastName("Dupond")
+                .phone("phone 5")
+                .zip("zip 4")
+                .address("address")
+                .city("city 4")
+                .email("email 5")
+                .build();
+        Person person6 = Person.builder()
+                .firstName("Marie")
+                .lastName("Dupond")
+                .phone("phone 6")
+                .zip("zip 4")
+                .address("address")
+                .city("city 4")
+                .email("email 6")
+                .build();
         personsMocked.add(person1);
         personsMocked.add(person2);
         personsMocked.add(person3);
+        personsMocked.add(person4);
+        personsMocked.add(person5);
+        personsMocked.add(person6);
         return personsMocked;
     }
 
@@ -65,9 +95,14 @@ public class DataSourceTest {
                 .address("address 3")
                 .stationNumber("number 3")
                 .build();
+        Firestation firestation4 = Firestation.builder()
+                .address("address")
+                .stationNumber("number")
+                .build();
         firestationsMocked.add(firestation1);
         firestationsMocked.add(firestation2);
         firestationsMocked.add(firestation3);
+        firestationsMocked.add(firestation4);
         return firestationsMocked;
     }
 
@@ -75,36 +110,62 @@ public class DataSourceTest {
         MedicalRecord medicalRecord1 = MedicalRecord.builder()
                 .firstName("first name 1")
                 .lastName("last name 1")
-                .birthdate("birthdate 1")
+                .birthdate("01/01/2015")
                 .medications("medications 1")
                 .allergies("allergies 1")
                 .build();
         MedicalRecord medicalRecord2 = MedicalRecord.builder()
                 .firstName("first name 2")
                 .lastName("last name 2")
-                .birthdate("birthdate 2")
+                .birthdate("01/01/2010")
                 .medications("medications 2")
                 .allergies("allergies 2")
                 .build();
         MedicalRecord medicalRecord3 = MedicalRecord.builder()
                 .firstName("first name 3")
                 .lastName("last name 3")
-                .birthdate("birthdate 3")
+                .birthdate("01/01/1952")
+                .medications("medications 3")
+                .allergies("allergies 3")
+                .build();
+        MedicalRecord medicalRecord4 = MedicalRecord.builder()
+                .firstName("Pierre")
+                .lastName("Dupond")
+                .birthdate("01/01/2015")
+                .medications("medications 1")
+                .allergies("allergies 1")
+                .build();
+        MedicalRecord medicalRecord5 = MedicalRecord.builder()
+                .firstName("Paul")
+                .lastName("Dupond")
+                .birthdate("01/01/2010")
+                .medications("medications 2")
+                .allergies("allergies 2")
+                .build();
+        MedicalRecord medicalRecord6 = MedicalRecord.builder()
+                .firstName("Marie")
+                .lastName("Dupond")
+                .birthdate("01/01/1952")
                 .medications("medications 3")
                 .allergies("allergies 3")
                 .build();
         medicalRecordsMocked.add(medicalRecord1);
         medicalRecordsMocked.add(medicalRecord2);
         medicalRecordsMocked.add(medicalRecord3);
+        medicalRecordsMocked.add(medicalRecord4);
+        medicalRecordsMocked.add(medicalRecord5);
+        medicalRecordsMocked.add(medicalRecord6);
         return medicalRecordsMocked;
     }
 
     public void clearPersonsMocked() {
         personsMocked.clear();
     }
+
     public void clearFirestationsMocked() {
         firestationsMocked.clear();
     }
+
     public void clearMedicalRecordsMocked() {
         medicalRecordsMocked.clear();
     }

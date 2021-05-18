@@ -3,7 +3,6 @@ package com.safetynet.alerts.api.controller;
 import com.safetynet.alerts.api.exceptions.FirestationAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.model.Firestation;
-import com.safetynet.alerts.api.model.dto.PersonInfoByFirestationDto;
 import com.safetynet.alerts.api.service.FirestationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,9 +20,8 @@ import java.util.List;
 public class FirestationController {
     private static final Logger logger = LoggerFactory.getLogger(FirestationController.class);
 
-
     @Autowired
-    FirestationService firestationService;
+    private FirestationService firestationService;
 
 
     @ApiOperation("Get the list of all firestations")
@@ -79,18 +77,4 @@ public class FirestationController {
         logger.info("REST : Delete firestation address: {} ", address);
         firestationService.deleteFirestation(address);
     }
-
-    @ApiOperation("Get a list of person and a count of adults and children covered by firestation found by a station number")
-    @GetMapping("/firestation")
-    public ResponseEntity<PersonInfoByFirestationDto> getFirestationsByStationNumber (@RequestParam("stationNumber") String stationNumber) {
-        logger.info("REST : Get a list of persons and a count of adults and children covered by firestation found by a station number");
-        try {
-            PersonInfoByFirestationDto personsFoundByStationNumber = firestationService.findPersonsByStationNumber(stationNumber);
-            return ResponseEntity.ok(personsFoundByStationNumber);
-        }catch (FirestationNotFoundException e) {
-            logger.error("REST : Get a list of persons and a count of adults and children covered by firestation found by a station number error because station number : {}" + " is not found", stationNumber);
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
 }
