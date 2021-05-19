@@ -30,7 +30,7 @@ public class InformationControllerTest {
 
 
     @Test
-    @DisplayName("GET request (firestation?stationNumber=<station_number) with an exiting station number must return an HTTP 200 response")
+    @DisplayName("GET request (firestation?stationNumber=<station_number>) with an exiting station number must return an HTTP 200 response")
     public void testGetPersonInfoByStationNumber() throws Exception {
 
         //GIVEN
@@ -41,7 +41,7 @@ public class InformationControllerTest {
     }
 
     @Test
-    @DisplayName("GET request (firestation?stationNumber=<station_number) with an unknown station number must return an HTTP 404 response")
+    @DisplayName("GET request (firestation?stationNumber=<station_number>) with an unknown station number must return an HTTP 404 response")
     public void testGetPersonInfoByUnknownStationNumber() throws Exception {
 
         //GIVEN
@@ -76,7 +76,7 @@ public class InformationControllerTest {
     }
 
     @Test
-    @DisplayName("GET request (phoneAlert?firestation=<firestationNumber) with an exiting firestation number must return an HTTP 200 response")
+    @DisplayName("GET request (phoneAlert?firestation=<firestationNumber>) with an exiting firestation number must return an HTTP 200 response")
     public void testGetPhoneAlertByFirestationNumber() throws Exception {
 
         //GIVEN
@@ -87,7 +87,7 @@ public class InformationControllerTest {
     }
 
     @Test
-    @DisplayName("GET request (phoneAlert?firestation=<firestationNumber) with an unknown firestation number must return an HTTP 404 response")
+    @DisplayName("GET request (phoneAlert?firestation=<firestationNumber>) with an unknown firestation number must return an HTTP 404 response")
     public void testGetPhoneAlertByUnknownFirestationNumber() throws Exception {
 
         //GIVEN
@@ -95,6 +95,29 @@ public class InformationControllerTest {
 
         //THEN
         mockMvc.perform(get("/phoneAlert?firestation=10"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET request (fire?address=<address>) with an exiting address must return an HTTP 200 response")
+    public void testGetListOfFirePersonByAddress() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/fire?address=address"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET request (fire?address=<address>) with an unknown address must return an HTTP 404 response")
+    public void testGetListOfFirePersonByUnknownAddress() throws Exception {
+
+        //GIVEN
+        given(informationService.findListOfFirePersonByAddress("unknown")).willThrow(new PersonNotFoundException("REST : Get a list of fire person covered find by address error because address is not found"));
+
+        //THEN
+        mockMvc.perform(get("/fire?address=unknown"))
                 .andExpect(status().isNotFound());
     }
 

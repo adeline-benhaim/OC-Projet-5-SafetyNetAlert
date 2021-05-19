@@ -2,6 +2,7 @@ package com.safetynet.alerts.api.service;
 
 import com.safetynet.alerts.api.model.Person;
 import com.safetynet.alerts.api.model.dto.ChildAlertDto;
+import com.safetynet.alerts.api.model.dto.FireDto;
 import com.safetynet.alerts.api.model.dto.PersonAdultChildListDto;
 import com.safetynet.alerts.api.model.dto.PersonInfoByFirestationDto;
 
@@ -40,4 +41,12 @@ public interface InformationService {
      * @return a list with phone numbers of all persons covered by the firestation number sought
      */
     List<String> findListOfPhoneNumbersByFirestationNumber(String firestationNumber);
+
+    /**
+     * Find a list of person with name, phone, age, medications and allergies, and firestation number corresponding to a given address
+     *
+     * @param address for which person list is sought
+     * @return a list of person with name, phone, age, medications and allergies, and firestation number
+     */
+    FireDto findListOfFirePersonByAddress(String address);
 }

@@ -1,7 +1,6 @@
 package com.safetynet.alerts.api.integration;
 
 import com.safetynet.alerts.api.config.DataSource;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,14 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
-import java.sql.ResultSet;
-import java.util.Map;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,8 +42,8 @@ public class InformationControllerIntegrationTest {
                 .andExpect(jsonPath("$.personDto[0].lastName", is("Duncan")))
                 .andExpect(jsonPath("$.personDto[0].address", is("644 Gershwin Cir 97451 Culver")))
                 .andExpect(jsonPath("$.personDto[0].phone", is("841-874-6512")))
-                .andExpect(jsonPath("$.countPersonAdultChildDto", Matchers.hasEntry("Number of children",1)))
-                .andExpect(jsonPath("$.countPersonAdultChildDto", Matchers.hasEntry("Number of adults",5)));
+                .andExpect(jsonPath("$.numberOfChildren", is(1)))
+                .andExpect(jsonPath("$.numberOfAdults", is(5)));
     }
 
     @Test
@@ -111,6 +105,33 @@ public class InformationControllerIntegrationTest {
 
         //THEN
         mockMvc.perform(get("/phoneAlert?firestation=10"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET request (fire?address=<address>) with an exiting address must return an HTTP 200 response")
+    public void testGetListOfFirePersonByAddress() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/fire?address=1509 Culver St"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.personInfoFireDtoList[0].firstName", is("John")))
+                .andExpect(jsonPath("$.personInfoFireDtoList[0].age", notNullValue()))
+                .andExpect(jsonPath("$.personInfoFireDtoList[0].medications", notNullValue()))
+                .andExpect(jsonPath("$.personInfoFireDtoList[0].allergies", notNullValue()))
+                .andExpect(jsonPath("$.firestationNumber", is("3")));
+    }
+
+    @Test
+    @DisplayName("GET request (fire?address=<address>) with an unknown address must return an HTTP 404 response")
+    public void testGetListOfFirePersonByUnknownAddress() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/fire?address=unknown"))
                 .andExpect(status().isNotFound());
     }
 

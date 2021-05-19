@@ -11,6 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 public class PersonAdultChildListDto {
-    public List<Person> listOfAdult;
-    public List<Person> listOfChild;
+    private List<Person> listOfAdult;
+    private List<Person> listOfChild;
 }

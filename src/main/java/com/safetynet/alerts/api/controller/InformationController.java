@@ -3,6 +3,7 @@ package com.safetynet.alerts.api.controller;
 import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.api.model.dto.ChildAlertDto;
+import com.safetynet.alerts.api.model.dto.FireDto;
 import com.safetynet.alerts.api.model.dto.PersonInfoByFirestationDto;
 import com.safetynet.alerts.api.service.InformationService;
 import io.swagger.annotations.Api;
@@ -72,6 +73,25 @@ public class InformationController {
             return ResponseEntity.ok(phoneAlertDtoList);
         }catch (FirestationNotFoundException e) {
             logger.error("REST : Get a list of phone numbers covered by the firestation number error because firestation number : {}" + " is not found", firestationNumber);
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * Find a list of person with name, phone, age, medications and allergies, and firestation number corresponding to a given address
+     *
+     * @param address for which person list is sought
+     * @return a list of person with name, phone, age, medications and allergies, and firestation number
+     */
+    @ApiOperation("Get a list of person with name, phone, age, medications and allergies, and firestation number corresponding to a given address")
+    @GetMapping("/fire")
+    public ResponseEntity<FireDto> getListOfFirePersonByAddress (@RequestParam("address") String address) {
+        logger.info("REST : Get a list of fire person by address");
+        try {
+            FireDto fireDto = informationService.findListOfFirePersonByAddress(address);
+            return ResponseEntity.ok(fireDto);
+        }catch (PersonNotFoundException e) {
+            logger.error("REST : Get a list of fire person covered find by address error because address : {}" + " is not found", address);
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
