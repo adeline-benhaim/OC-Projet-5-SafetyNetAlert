@@ -29,6 +29,11 @@ public class Person {
     private String birthdate;
     @JsonIgnore
     private List<Person> houseHoldMembers;
+    @JsonIgnore
+    private String medications;
+    @JsonIgnore
+    private String allergies;
+
 
     public void calculateAge(String birthdate) {
             Locale.setDefault(Locale.FRANCE);

@@ -3,6 +3,7 @@ package com.safetynet.alerts.api.mapper;
 import com.safetynet.alerts.api.model.Person;
 import com.safetynet.alerts.api.model.dto.ChildAlertDto;
 import com.safetynet.alerts.api.model.dto.PersonDto;
+import com.safetynet.alerts.api.model.dto.PersonInfoFireDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,17 @@ public class PersonMapper {
                 .lastName(person.getLastName())
                 .age(person.getAge())
                 .houseHoldMembers(person.getHouseHoldMembers())
+                .build();
+    }
+
+    public static PersonInfoFireDto convertToPersonInfoFireDto(Person person) {
+        return PersonInfoFireDto.builder()
+                .firstName(person.getFirstName())
+                .lastName(person.getLastName())
+                .phone(person.getPhone())
+                .age(person.getAge())
+                .medications(person.getMedications())
+                .allergies(person.getAllergies())
                 .build();
     }
 }
