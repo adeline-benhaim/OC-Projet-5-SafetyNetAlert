@@ -5,6 +5,7 @@ import com.safetynet.alerts.api.model.Firestation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,10 +25,10 @@ public class FirestationDaoImpl implements FirestationDao {
     }
 
     /**
-     * Find firestation number by address
+     * Find firestation by address
      *
      * @param address for which the firestation number is sought
-     * @return the number of firestation associate
+     * @return the firestation associate
      */
     @Override
     public Firestation findByAddress(String address) {
@@ -40,6 +41,22 @@ public class FirestationDaoImpl implements FirestationDao {
         return null;
     }
 
+    /**
+     * Find a list of firestation found by station number
+     *
+     * @param stationNumber for which the firestation number is sought
+     * @return a list of firestation found by station number
+     */
+    @Override
+    public List<Firestation> findByStationNumber(String stationNumber) {
+        List<Firestation> firestations = dataSource.getAllFirestation();
+        List<Firestation> firestationList = new ArrayList<>();
+        for (Firestation firestation : firestations) {
+            if (firestation.getStationNumber().equalsIgnoreCase(stationNumber)) firestationList.add(firestation);
+        }
+        if (firestationList.isEmpty()) return null;
+        return firestationList;
+    }
 
     /**
      * Save firestation

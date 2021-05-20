@@ -26,6 +26,8 @@ public class InformationControllerIntegrationTest {
     private void setUpPerTest() throws Exception {
         DataSource dataSource = new DataSource();
         dataSource.persons.clear();
+        dataSource.firestations.clear();
+        dataSource.medicalRecords.clear();
         dataSource.init();
     }
 
@@ -64,13 +66,13 @@ public class InformationControllerIntegrationTest {
         //GIVEN
 
         //THEN
-        mockMvc.perform(get("/childAlert?address=1509 Culver St"))
+        mockMvc.perform(get("/childAlert?address=947 E. Rose Dr"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].firstName", is("Tenley")))
-                .andExpect(jsonPath("$[0].lastName", is("Boyd")))
-                .andExpect(jsonPath("$[0].age", is(9)))
-                .andExpect(jsonPath("$[0].houseHoldMembers[0].lastName", is("Boyd")))
-                .andExpect(jsonPath("$[0].houseHoldMembers[0].address", is("1509 Culver St")));
+                .andExpect(jsonPath("$[0].firstName", is("Kendrik")))
+                .andExpect(jsonPath("$[0].lastName", is("Stelzer")))
+                .andExpect(jsonPath("$[0].age", is(7)))
+                .andExpect(jsonPath("$[0].houseHoldMembers[0].lastName", is("Stelzer")))
+                .andExpect(jsonPath("$[0].houseHoldMembers[0].address", is("947 E. Rose Dr")));
     }
 
     @Test
@@ -115,9 +117,9 @@ public class InformationControllerIntegrationTest {
         //GIVEN
 
         //THEN
-        mockMvc.perform(get("/fire?address=1509 Culver St"))
+        mockMvc.perform(get("/fire?address=112 Steppes Pl"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.personInfoFireDtoList[0].firstName", is("John")))
+                .andExpect(jsonPath("$.personInfoFireDtoList[0].firstName", is("Tony")))
                 .andExpect(jsonPath("$.personInfoFireDtoList[0].age", notNullValue()))
                 .andExpect(jsonPath("$.personInfoFireDtoList[0].medications", notNullValue()))
                 .andExpect(jsonPath("$.personInfoFireDtoList[0].allergies", notNullValue()))
@@ -132,6 +134,33 @@ public class InformationControllerIntegrationTest {
 
         //THEN
         mockMvc.perform(get("/fire?address=unknown"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET request (flood/stations?stations=<station_numbers>) with an exiting station number must return an HTTP 200 response")
+    public void findListOfFloodPersonByStationNumberTest() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/flood/stations?stations=1"))
+                .andExpect(jsonPath("$[0].address", is("644 Gershwin Cir")))
+                .andExpect(jsonPath("$[1].address", is("908 73rd St")))
+                .andExpect(jsonPath("$[0].personList[0].firstName", is("Peter")))
+                .andExpect(jsonPath("$[0].personList[0].age", is(20)))
+                .andExpect(jsonPath("$[0].personList[0].allergies", is("[shellfish]")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET request (flood/stations?stations=<station_numbers>) with an unknown station number must return an HTTP 404 response")
+    public void findListOfFloodPersonByUnknownStationNumberTest() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/flood/stations?stations=20"))
                 .andExpect(status().isNotFound());
     }
 

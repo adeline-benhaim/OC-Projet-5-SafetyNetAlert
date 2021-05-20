@@ -4,6 +4,7 @@ import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
 import com.safetynet.alerts.api.model.dto.ChildAlertDto;
 import com.safetynet.alerts.api.model.dto.FireDto;
+import com.safetynet.alerts.api.model.dto.FloodDto;
 import com.safetynet.alerts.api.model.dto.PersonInfoByFirestationDto;
 import com.safetynet.alerts.api.service.InformationService;
 import io.swagger.annotations.Api;
@@ -78,7 +79,7 @@ public class InformationController {
     }
 
     /**
-     * Find a list of person with name, phone, age, medications and allergies, and firestation number corresponding to a given address
+     * Get a list of person with name, phone, age, medications and allergies, and firestation number corresponding to a given address
      *
      * @param address for which person list is sought
      * @return a list of person with name, phone, age, medications and allergies, and firestation number
@@ -92,6 +93,24 @@ public class InformationController {
             return ResponseEntity.ok(fireDto);
         }catch (PersonNotFoundException e) {
             logger.error("REST : Get a list of fire person covered find by address error because address : {}" + " is not found", address);
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * Get a list of all persons served by the station number, sorted by address
+     * @param stationNumber for which person list is sought
+     * @return a list of persons with name, phone, age, medications and allergies, sorted by address
+     */
+    @ApiOperation("Get a list of person with name, phone, age, medications and allergies, and firestation number corresponding to a given address")
+    @GetMapping("/flood/stations")
+    public ResponseEntity<List<FloodDto>> getListOfFloodPersonByStationNumber (@RequestParam("stations")String stationNumber) {
+        logger.info("REST : Get list of flood person by station number");
+        try {
+            List<FloodDto> floodDto = informationService.findListOfFloodPersonByStationNumber(stationNumber);
+            return ResponseEntity.ok(floodDto);
+        }catch (FirestationNotFoundException e) {
+            logger.error("REST : Get a list of flood person covered find by address error because station number : {}" + " is not found", stationNumber);
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
