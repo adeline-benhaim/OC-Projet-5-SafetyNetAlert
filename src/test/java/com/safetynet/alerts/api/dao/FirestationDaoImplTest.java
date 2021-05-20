@@ -76,6 +76,34 @@ public class FirestationDaoImplTest {
     }
 
     @Test
+    @DisplayName("Get a list of firestation found by station number")
+    void findListOfFirestationFoundByStationNumberTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
+
+        // WHEN
+        List<Firestation> firestation = firestationDao.findByStationNumber("number 1");
+
+        // THEN
+        assertTrue(firestation.contains(dataSourceTest.getFirestationsMocked().get(0)));
+    }
+
+    @Test
+    @DisplayName("Get an list of firestation found by unknown station number return null")
+    void findListOfFirestationFoundByUnknownStationNumberTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
+
+        // WHEN
+        List<Firestation> firestation = firestationDao.findByStationNumber("5");
+
+        // THEN
+        assertNull(firestation);
+    }
+
+    @Test
     @DisplayName("Save a new firestation which does not exist in the data source")
     void saveNewFirestationTest() {
 

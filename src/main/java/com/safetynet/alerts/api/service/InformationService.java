@@ -1,10 +1,7 @@
 package com.safetynet.alerts.api.service;
 
 import com.safetynet.alerts.api.model.Person;
-import com.safetynet.alerts.api.model.dto.ChildAlertDto;
-import com.safetynet.alerts.api.model.dto.FireDto;
-import com.safetynet.alerts.api.model.dto.PersonAdultChildListDto;
-import com.safetynet.alerts.api.model.dto.PersonInfoByFirestationDto;
+import com.safetynet.alerts.api.model.dto.*;
 
 import java.util.List;
 
@@ -49,4 +46,11 @@ public interface InformationService {
      * @return a list of person with name, phone, age, medications and allergies, and firestation number
      */
     FireDto findListOfFirePersonByAddress(String address);
+
+    /**
+     * Find a list of all persons served by the station number, sorted by address
+     * @param stationNumber for which person list is sought
+     * @return a list of persons with name, phone, age, medications and allergies, sorted by address
+     */
+    List<FloodDto> findListOfFloodPersonByStationNumber(String stationNumber);
 }

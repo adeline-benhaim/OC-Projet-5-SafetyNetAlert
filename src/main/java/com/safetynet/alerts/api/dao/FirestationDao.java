@@ -3,7 +3,6 @@ package com.safetynet.alerts.api.dao;
 import com.safetynet.alerts.api.model.Firestation;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FirestationDao {
 
@@ -19,6 +18,13 @@ public interface FirestationDao {
      * @return the number of firestation associate
      */
     Firestation findByAddress(String address);
+
+    /**
+     * Find a list of firestation found by station number
+     * @param stationNumber for which the firestation number is sought
+     * @return a list of firestation found by station number
+     */
+    List<Firestation> findByStationNumber(String stationNumber);
 
     /**
      * Save firestation

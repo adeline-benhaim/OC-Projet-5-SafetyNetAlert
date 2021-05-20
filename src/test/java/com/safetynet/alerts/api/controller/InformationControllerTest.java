@@ -2,9 +2,7 @@ package com.safetynet.alerts.api.controller;
 
 import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
-import com.safetynet.alerts.api.service.FirestationServiceImpl;
 import com.safetynet.alerts.api.service.InformationServiceImpl;
-import com.safetynet.alerts.api.service.PersonServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,6 @@ public class InformationControllerTest {
 
     @MockBean
     private InformationServiceImpl informationService;
-
-    @MockBean
-    private PersonServiceImpl personService;
 
 
     @Test
@@ -118,6 +113,29 @@ public class InformationControllerTest {
 
         //THEN
         mockMvc.perform(get("/fire?address=unknown"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET request (flood/stations?stations=<station_numbers>) with an exiting station number must return an HTTP 200 response")
+    public void findListOfFloodPersonByStationNumberTest() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/flood/stations?stations=1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET request (flood/stations?stations=<station_numbers>) with an unknown station number must return an HTTP 404 response")
+    public void findListOfFloodPersonByUnknownStationNumberTest() throws Exception {
+
+        //GIVEN
+        given(informationService.findListOfFloodPersonByStationNumber("unknown")).willThrow(new FirestationNotFoundException("REST : Get a list of flood person covered find by address error because station number is not found"));
+
+        //THEN
+        mockMvc.perform(get("/flood/stations?stations=unknown"))
                 .andExpect(status().isNotFound());
     }
 

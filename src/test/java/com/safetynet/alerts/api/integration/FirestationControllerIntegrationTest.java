@@ -1,7 +1,6 @@
 package com.safetynet.alerts.api.integration;
 
 import com.safetynet.alerts.api.config.DataSource;
-import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.model.Firestation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,6 @@ import java.io.IOException;
 
 import static com.safetynet.alerts.api.config.DataSourceTest.asJsonString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

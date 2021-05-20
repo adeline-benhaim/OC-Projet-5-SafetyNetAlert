@@ -123,6 +123,70 @@ public class PersonTest {
     }
 
     @Test
+    @DisplayName("Get birthdate of person")
+    void testPersonGetBirthdate() {
+
+        //GIVEN
+        String birthdate = "birthdate";
+
+        //WHEN
+        person = Person.builder()
+                .birthdate("birthdate")
+                .build();
+
+        //THEN
+        assertThat(birthdate).isEqualTo(person.getBirthdate());
+    }
+
+    @Test
+    @DisplayName("Get age of person")
+    void testPersonGetAge() {
+
+        //GIVEN
+        int age = 2;
+
+        //WHEN
+        person = Person.builder()
+                .age(2)
+                .build();
+
+        //THEN
+        assertThat(age).isEqualTo(person.getAge());
+    }
+
+    @Test
+    @DisplayName("Get medications of person")
+    void testPersonGetMedications() {
+
+        //GIVEN
+        String medications = "medications";
+
+        //WHEN
+        person = Person.builder()
+                .medications("medications")
+                .build();
+
+        //THEN
+        assertThat(medications).isEqualTo(person.getMedications());
+    }
+
+    @Test
+    @DisplayName("Get allergies of person")
+    void testPersonGetAllergies() {
+
+        //GIVEN
+        String allergies = "allergies";
+
+        //WHEN
+        person = Person.builder()
+                .allergies("allergies")
+                .build();
+
+        //THEN
+        assertThat(allergies).isEqualTo(person.getAllergies());
+    }
+
+    @Test
     @DisplayName("Set a person")
     void testPersonSetAPerson() {
 
@@ -140,6 +204,8 @@ public class PersonTest {
         person.setEmail("email");
         person.setBirthdate("birthdate");
         person.setAge(0);
+        person.setMedications("medications");
+        person.setAllergies("allergies");
 
         //THEN
         assertThat(person.getFirstName()).isEqualTo("firstName");
@@ -151,5 +217,7 @@ public class PersonTest {
         assertThat(person.getEmail()).isEqualTo("email");
         assertThat(person.getBirthdate()).isEqualTo("birthdate");
         assertThat(person.getAge()).isEqualTo(0);
+        assertThat(person.getMedications()).isEqualTo("medications");
+        assertThat(person.getAllergies()).isEqualTo("allergies");
     }
 }

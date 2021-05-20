@@ -172,4 +172,34 @@ public class InformationServiceImpl implements InformationService {
         throw new PersonNotFoundException("Get a list of fire person by address error because the address : " + address + " is not found");
     }
 
+    /**
+     * Find a list of all persons served by the station number, sorted by address
+     * @param stationNumber for which person list is sought
+     * @return a list of persons with name, phone, age, medications and allergies, sorted by address
+     */
+    @Override
+    public List<FloodDto> findListOfFloodPersonByStationNumber(String stationNumber) {
+        logger.info("Get list of fire person by station number : {}", stationNumber);
+        List<Firestation> firestationList = firestationDao.findByStationNumber(stationNumber);
+        if (firestationList != null) {
+            List<FloodDto> floodDtoList = new ArrayList<>();
+            FloodDto floodDto = null;
+            for (Firestation firestation : firestationList) {
+                List<PersonInfoFireDto> personListByAddress = new ArrayList<>();
+                List<PersonInfoFireDto> personInfoFireDtoList = findListOfFirePersonByAddress(firestation.getAddress()).getPersonInfoFireDtoList();
+                for (PersonInfoFireDto personInfoFireDto : personInfoFireDtoList) {
+                    personListByAddress.add(personInfoFireDto);
+                    floodDto = FloodDto.builder()
+                            .address(firestation.getAddress())
+                            .personList(personListByAddress)
+                            .build();
+                }
+                floodDtoList.add(floodDto);
+            }
+            return floodDtoList;
+        }
+        logger.error("Get a list of flood person by station number error because station number : {}" + " is not found", stationNumber);
+        throw new FirestationNotFoundException("Trying to get non existing station number for given station number");
+    }
+
 }
