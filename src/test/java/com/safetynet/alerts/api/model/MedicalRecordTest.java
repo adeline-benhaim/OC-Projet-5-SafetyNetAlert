@@ -90,6 +90,22 @@ public class MedicalRecordTest {
     }
 
     @Test
+    @DisplayName("Get uniqueID of a medical record")
+    void testMedicalRecordGetUniqueID() {
+
+        //GIVEN
+        String uniqueID = "uniqueID";
+
+        //WHEN
+        medicalRecord = MedicalRecord.builder()
+                .uniqueID("uniqueID")
+                .build();
+
+        //THEN
+        assertThat(uniqueID).isEqualTo(medicalRecord.getUniqueID());
+    }
+
+    @Test
     @DisplayName("Set a medical record")
     void testMedicalRecordSet() {
 
@@ -108,6 +124,7 @@ public class MedicalRecordTest {
         medicalRecord.setBirthdate("birthdate");
         medicalRecord.setMedications("medications");
         medicalRecord.setAllergies("allergies");
+        medicalRecord.setUniqueID("uniqueID");
 
         //THEN
         assertThat(medicalRecord.getFirstName()).isEqualTo("firstName");
@@ -115,5 +132,6 @@ public class MedicalRecordTest {
         assertThat(medicalRecord.getBirthdate()).isEqualTo("birthdate");
         assertThat(medicalRecord.getMedications()).isEqualTo("medications");
         assertThat(medicalRecord.getAllergies()).isEqualTo("allergies");
+        assertThat(medicalRecord.getUniqueID()).isEqualTo("uniqueID");
     }
 }

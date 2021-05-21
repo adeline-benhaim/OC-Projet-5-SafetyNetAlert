@@ -53,4 +53,12 @@ public interface InformationService {
      * @return a list of persons with name, phone, age, medications and allergies, sorted by address
      */
     List<FloodDto> findListOfFloodPersonByStationNumber(String stationNumber);
+
+    /**
+     * Find a person info or a list of person info if if several persons have the same name
+     * @param firstName of person info sought
+     * @param lastName of person info sought
+     * @return person info with name, address, age, email medications and allergies
+     */
+    List<PersonInfoDto> findPersonInfoByFirstnameAndLastname(String firstName, String lastName);
 }

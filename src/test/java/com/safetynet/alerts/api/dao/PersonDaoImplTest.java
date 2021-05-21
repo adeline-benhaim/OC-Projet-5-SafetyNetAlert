@@ -97,7 +97,7 @@ class PersonDaoImplTest {
 
 
         // THEN
-        Person personTest = dataSourceTest.getPersonsMocked().get(6);
+        Person personTest = dataSourceTest.getPersonsMocked().get(7);
         assertEquals(savePerson.getFirstName(), personTest.getFirstName());
         assertEquals(savePerson.getLastName(), personTest.getLastName());
         assertEquals(savePerson.getAddress(), personTest.getAddress());

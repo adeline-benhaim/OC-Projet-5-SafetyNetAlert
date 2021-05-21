@@ -139,7 +139,7 @@ public class InformationControllerIntegrationTest {
 
     @Test
     @DisplayName("GET request (flood/stations?stations=<station_numbers>) with an exiting station number must return an HTTP 200 response")
-    public void findListOfFloodPersonByStationNumberTest() throws Exception {
+    public void testGetListOfFloodPersonByStationNumber() throws Exception {
 
         //GIVEN
 
@@ -155,7 +155,7 @@ public class InformationControllerIntegrationTest {
 
     @Test
     @DisplayName("GET request (flood/stations?stations=<station_numbers>) with an unknown station number must return an HTTP 404 response")
-    public void findListOfFloodPersonByUnknownStationNumberTest() throws Exception {
+    public void testGetListOfFloodPersonByUnknownStationNumber() throws Exception {
 
         //GIVEN
 
@@ -164,4 +164,31 @@ public class InformationControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @DisplayName("GET request (personInfo?firstName=<firstName>&lastName=<lastName>) with an exiting person must return an HTTP 200 response")
+    public void testGetPersonInfoByFirstnameAndLastname() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/personInfo?firstName=Jacob&lastName=boyd"))
+                .andExpect(jsonPath("$[0].name", is("Jacob Boyd")))
+                .andExpect(jsonPath("$[0].address", is("1509 Culver St 97451 Culver")))
+                .andExpect(jsonPath("$[0].age", is(32)))
+                .andExpect(jsonPath("$[0].email", is("drk@email.com")))
+                .andExpect(jsonPath("$[0].allergies", is("[]")))
+                .andExpect(jsonPath("$[0].medications", is("[pharmacol:5000mg, terazine:10mg, noznazol:250mg]")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET request (personInfo?firstName=<firstName>&lastName=<lastName>) with an unknown person must return an HTTP 404 response")
+    public void testGetUnknownPersonInfoByFirstnameAndLastname() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/personInfo?firstName=Unknown&lastName=Unknown"))
+                .andExpect(status().isNotFound());
+    }
 }

@@ -21,6 +21,13 @@ public interface MedicalRecordDao {
     MedicalRecord findByFirstNameAndLastName(String firstName, String lastName);
 
     /**
+     * Find a medical record by ID
+     * @param uniqueID of the person concerned
+     * @return the medical record of the person concerned
+     */
+    MedicalRecord findByUniqueID(String uniqueID);
+
+    /**
      * Save a medical record
      * @param medicalRecord information (firstname, lastname, birthdate, medications, allergies)
      * @return the information of medical record saved

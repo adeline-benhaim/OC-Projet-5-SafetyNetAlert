@@ -76,6 +76,34 @@ public class MedicalRecordDaoImplTest {
     }
 
     @Test
+    @DisplayName("Get an existing medical record found by uniqueID")
+    void findExistingMedicalRecordByUniqueIDTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
+
+        // WHEN
+        MedicalRecord medicalRecord = medicalRecordDao.findByUniqueID("uniqueID1");
+
+        // THEN
+        assertEquals(medicalRecord, dataSourceTest.getMedicalRecordsMocked().get(0));
+    }
+
+    @Test
+    @DisplayName("Get an unknown medical record found by uniqueID return null")
+    void findUnknownMedicalRecordByUniqueIDTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllMedicalRecords()).thenReturn(dataSourceTest.getAllMedicalRecordMocked());
+
+        // WHEN
+        MedicalRecord medicalRecord = medicalRecordDao.findByUniqueID("uniqueID50");
+
+        // THEN
+        assertNull(medicalRecord);
+    }
+
+    @Test
     @DisplayName("Save a new medical record which does not exist in the data source")
     void saveNewMedicalRecordTest() {
 
@@ -95,7 +123,7 @@ public class MedicalRecordDaoImplTest {
         int sizeListAfterSave = dataSourceTest.getMedicalRecordsMocked().size();
 
         // THEN
-        MedicalRecord medicalRecordTest = dataSourceTest.getMedicalRecordsMocked().get(6);
+        MedicalRecord medicalRecordTest = dataSourceTest.getMedicalRecordsMocked().get(7);
         assertEquals(saveMedicalRecord.getFirstName(), medicalRecordTest.getFirstName());
         assertEquals(saveMedicalRecord.getLastName(), medicalRecordTest.getLastName());
         assertEquals(saveMedicalRecord.getBirthdate(), medicalRecordTest.getBirthdate());

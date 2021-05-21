@@ -4,16 +4,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Builder
 @Getter
 @Setter
-public class PersonInfoFireDto {
+@Builder
+public class PersonInfoDto {
 
-    private String firstName;
-    private String lastName;
-    private String phone;
+    private String name;
+    private String address;
     private int age;
+    private String email;
     private String medications;
     private String allergies;
-
 }
