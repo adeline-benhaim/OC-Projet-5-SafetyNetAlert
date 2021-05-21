@@ -187,6 +187,22 @@ public class PersonTest {
     }
 
     @Test
+    @DisplayName("Get UniqueID of person")
+    void testPersonGetUniqueID() {
+
+        //GIVEN
+        String UniqueID = "UniqueID";
+
+        //WHEN
+        person = Person.builder()
+                .uniqueID("UniqueID")
+                .build();
+
+        //THEN
+        assertThat(UniqueID).isEqualTo(person.getUniqueID());
+    }
+
+    @Test
     @DisplayName("Set a person")
     void testPersonSetAPerson() {
 
@@ -206,6 +222,7 @@ public class PersonTest {
         person.setAge(0);
         person.setMedications("medications");
         person.setAllergies("allergies");
+        person.setUniqueID("UniqueID");
 
         //THEN
         assertThat(person.getFirstName()).isEqualTo("firstName");
@@ -219,5 +236,6 @@ public class PersonTest {
         assertThat(person.getAge()).isEqualTo(0);
         assertThat(person.getMedications()).isEqualTo("medications");
         assertThat(person.getAllergies()).isEqualTo("allergies");
+        assertThat(person.getUniqueID()).isEqualTo("UniqueID");
     }
 }

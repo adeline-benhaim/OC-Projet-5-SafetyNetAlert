@@ -109,7 +109,7 @@ public class InformationServiceImplTest {
         //GIVEN
         when(personDao.findByStationNumber("number")).thenReturn(dataSourceTest.getAllPersonMocked());
         List<String> phonesMocked = new ArrayList<>();
-        Collections.addAll(phonesMocked, "phone 1", "phone 2", "phone 3", "phone 4", "phone 5", "phone 6");
+        Collections.addAll(phonesMocked, "phone 1", "phone 2", "phone 3", "phone 4", "phone 5", "phone 6", "phone 7");
 
         //WHEN
         List<String> phones = informationService.findListOfPhoneNumbersByFirestationNumber("number");
@@ -151,4 +151,14 @@ public class InformationServiceImplTest {
         assertThrows(FirestationNotFoundException.class, () -> informationService.findListOfFloodPersonByStationNumber("5"));
     }
 
+    @Test
+    @DisplayName("Find a person info by unknown firstname and lastname return not found exception")
+    void findPersonInfoByUnknownFirstnameAndLastnameTest() {
+
+        //WHEN
+        when(personDao.findPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
+
+        //THEN
+        assertThrows(PersonNotFoundException.class, () -> informationService.findPersonInfoByFirstnameAndLastname("first name 8","last name 8"));
+    }
 }

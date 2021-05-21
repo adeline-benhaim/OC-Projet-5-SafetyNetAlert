@@ -42,6 +42,22 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
     }
 
     /**
+     * Find a medical record by ID
+     * @param uniqueID of the person concerned
+     * @return the medical record of the person concerned
+     */
+    @Override
+    public MedicalRecord findByUniqueID(String uniqueID) {
+        List<MedicalRecord> medicalRecordList = dataSource.getAllMedicalRecords();
+        for (MedicalRecord medicalRecord : medicalRecordList) {
+            if (medicalRecord.getUniqueID().equals(uniqueID)) {
+                return medicalRecord;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Save a medical record
      *
      * @param medicalRecord information (firstname, lastname, birthdate, medications, allergies)

@@ -118,7 +118,7 @@ public class InformationControllerTest {
 
     @Test
     @DisplayName("GET request (flood/stations?stations=<station_numbers>) with an exiting station number must return an HTTP 200 response")
-    public void findListOfFloodPersonByStationNumberTest() throws Exception {
+    public void testGetListOfFloodPersonByStationNumber() throws Exception {
 
         //GIVEN
 
@@ -129,13 +129,36 @@ public class InformationControllerTest {
 
     @Test
     @DisplayName("GET request (flood/stations?stations=<station_numbers>) with an unknown station number must return an HTTP 404 response")
-    public void findListOfFloodPersonByUnknownStationNumberTest() throws Exception {
+    public void testGetListOfFloodPersonByUnknownStationNumber() throws Exception {
 
         //GIVEN
         given(informationService.findListOfFloodPersonByStationNumber("unknown")).willThrow(new FirestationNotFoundException("REST : Get a list of flood person covered find by address error because station number is not found"));
 
         //THEN
         mockMvc.perform(get("/flood/stations?stations=unknown"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET request (personInfo?firstName=<firstName>&lastName=<lastName>) with an exiting person must return an HTTP 200 response")
+    public void testGetPersonInfoByFirstnameAndLastname() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/personInfo?firstName=FirstName&lastName=LastName"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET request (personInfo?firstName=<firstName>&lastName=<lastName>) with an unknown person must return an HTTP 404 response")
+    public void testGetUnknownPersonInfoByFirstnameAndLastname() throws Exception {
+
+        //GIVEN
+        given(informationService.findPersonInfoByFirstnameAndLastname("Unknown","Unknown")).willThrow(new PersonNotFoundException("REST : Get person info by firstname and lastname error because person is not found"));
+
+        //THEN
+        mockMvc.perform(get("/personInfo?firstName=Unknown&lastName=Unknown"))
                 .andExpect(status().isNotFound());
     }
 

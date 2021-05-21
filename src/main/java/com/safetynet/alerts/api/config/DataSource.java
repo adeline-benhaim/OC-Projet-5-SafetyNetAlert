@@ -22,6 +22,10 @@ public class DataSource {
     public List<Person> persons = new ArrayList<>();
 
     public List<Person> getAllPersons() {
+        for (Person person : persons){
+            String uniqueID = UUID.randomUUID().toString();
+            person.setUniqueID(uniqueID);
+        }
         return persons;
     }
 

@@ -24,6 +24,8 @@ public class Person {
     private String phone;
     private String email;
     @JsonIgnore
+    private String uniqueID;
+    @JsonIgnore
     private int age;
     @JsonIgnore
     private String birthdate;

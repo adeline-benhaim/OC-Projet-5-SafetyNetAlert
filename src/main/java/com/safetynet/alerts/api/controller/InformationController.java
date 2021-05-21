@@ -2,10 +2,7 @@ package com.safetynet.alerts.api.controller;
 
 import com.safetynet.alerts.api.exceptions.FirestationNotFoundException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
-import com.safetynet.alerts.api.model.dto.ChildAlertDto;
-import com.safetynet.alerts.api.model.dto.FireDto;
-import com.safetynet.alerts.api.model.dto.FloodDto;
-import com.safetynet.alerts.api.model.dto.PersonInfoByFirestationDto;
+import com.safetynet.alerts.api.model.dto.*;
 import com.safetynet.alerts.api.service.InformationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -114,4 +111,24 @@ public class InformationController {
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    /**
+     * Get a person info or a list of person info if several persons have the same name
+     * @param firstName of person info sought
+     * @param lastName of person info sought
+     * @return person info with name, address, age, email medications and allergies
+     */
+    @ApiOperation("Get a person info with name, address, age, email, medications and allergies, found by firstname and lastname ")
+    @GetMapping("/personInfo")
+    public ResponseEntity<List<PersonInfoDto>> getPersonInfoByFirstnameAndLastname (@RequestParam("firstName")String firstName, @RequestParam("lastName") String lastName) {
+        logger.info("REST : Get list of person info by firstname and lastname");
+        try {
+            List<PersonInfoDto> personInfoDtos = informationService.findPersonInfoByFirstnameAndLastname(firstName,lastName);
+            return ResponseEntity.ok(personInfoDtos);
+        }catch (PersonNotFoundException e) {
+            logger.error("REST : Get person info by firstname and lastname error because {} {} is not found", firstName, lastName);
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

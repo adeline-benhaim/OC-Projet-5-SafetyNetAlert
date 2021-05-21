@@ -174,6 +174,7 @@ public class InformationServiceImpl implements InformationService {
 
     /**
      * Find a list of all persons served by the station number, sorted by address
+     *
      * @param stationNumber for which person list is sought
      * @return a list of persons with name, phone, age, medications and allergies, sorted by address
      */
@@ -200,6 +201,44 @@ public class InformationServiceImpl implements InformationService {
         }
         logger.error("Get a list of flood person by station number error because station number : {}" + " is not found", stationNumber);
         throw new FirestationNotFoundException("Trying to get non existing station number for given station number");
+    }
+
+    /**
+     * Find a person info or a list of person info if several persons have the same name
+     * @param firstName of person info sought
+     * @param lastName of person info sought
+     * @return person info with name, address, age, email medications and allergies
+     */
+    @Override
+    public List<PersonInfoDto> findPersonInfoByFirstnameAndLastname(String firstName, String lastName) {
+        logger.info("Get person info by firstname : {} and lastname : {}", firstName, lastName);
+        List<Person> persons = personDao.findPersons();
+        List<Person> personList = new ArrayList<>();
+        for (Person person1 : persons) {
+            if (person1.getFirstName().equalsIgnoreCase(firstName) && person1.getLastName().equalsIgnoreCase(lastName)) {
+                personList.add(person1);
+            }
+        }
+        if (!personList.isEmpty()) {
+            return personList
+                    .stream()
+                    .map(person -> {
+                        MedicalRecord medicalRecord;
+                        if (personList.size() == 1) {
+                            medicalRecord = medicalRecordDao.findByFirstNameAndLastName(firstName, lastName);
+                        } else {
+                            medicalRecord = medicalRecordDao.findByUniqueID(person.getUniqueID());
+                        }
+                        person.setMedications(medicalRecord.getMedications());
+                        person.setAllergies(medicalRecord.getAllergies());
+                        person.setBirthdate(medicalRecord.getBirthdate());
+                        person.calculateAge(medicalRecord.getBirthdate());
+                        return PersonMapper.convertToPersonInfoDto(person);
+                    })
+                    .collect(Collectors.toList());
+        }
+        logger.error("Get person info by firstname and lastname error because {}" + " " + "{} is not found", firstName, lastName);
+        throw new PersonNotFoundException("Get person info by firstname and lastname error because " + firstName + " " + lastName + " is not found");
     }
 
 }

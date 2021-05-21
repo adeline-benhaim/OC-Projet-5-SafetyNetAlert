@@ -28,6 +28,7 @@ public class DataSourceTest {
                 .address("address 1")
                 .city("city 1")
                 .email("email 1")
+                .uniqueID("uniqueID1")
                 .build();
         Person person2 = Person.builder()
                 .firstName("first name 2")
@@ -37,6 +38,7 @@ public class DataSourceTest {
                 .address("address 2")
                 .city("city 2")
                 .email("email 2")
+                .uniqueID("uniqueID2")
                 .build();
         Person person3 = Person.builder()
                 .firstName("first name 3")
@@ -74,12 +76,23 @@ public class DataSourceTest {
                 .city("city 4")
                 .email("email 6")
                 .build();
+        Person person7 = Person.builder()
+                .firstName("first name 2")
+                .lastName("last name 2")
+                .phone("phone 7")
+                .zip("zip 7")
+                .address("address 2")
+                .city("city 2")
+                .email("email 7")
+                .uniqueID("uniqueID7")
+                .build();
         personsMocked.add(person1);
         personsMocked.add(person2);
         personsMocked.add(person3);
         personsMocked.add(person4);
         personsMocked.add(person5);
         personsMocked.add(person6);
+        personsMocked.add(person7);
         return personsMocked;
     }
 
@@ -114,6 +127,7 @@ public class DataSourceTest {
                 .birthdate("01/01/2015")
                 .medications("medications 1")
                 .allergies("allergies 1")
+                .uniqueID("uniqueID1")
                 .build();
         MedicalRecord medicalRecord2 = MedicalRecord.builder()
                 .firstName("first name 2")
@@ -121,6 +135,7 @@ public class DataSourceTest {
                 .birthdate("01/01/2010")
                 .medications("medications 2")
                 .allergies("allergies 2")
+                .uniqueID("uniqueID2")
                 .build();
         MedicalRecord medicalRecord3 = MedicalRecord.builder()
                 .firstName("first name 3")
@@ -128,6 +143,7 @@ public class DataSourceTest {
                 .birthdate("01/01/1952")
                 .medications("medications 3")
                 .allergies("allergies 3")
+                .uniqueID("uniqueID3")
                 .build();
         MedicalRecord medicalRecord4 = MedicalRecord.builder()
                 .firstName("Pierre")
@@ -135,6 +151,7 @@ public class DataSourceTest {
                 .birthdate("01/01/2015")
                 .medications("medications 1")
                 .allergies("allergies 1")
+                .uniqueID("uniqueID4")
                 .build();
         MedicalRecord medicalRecord5 = MedicalRecord.builder()
                 .firstName("Paul")
@@ -142,6 +159,7 @@ public class DataSourceTest {
                 .birthdate("01/01/2010")
                 .medications("medications 2")
                 .allergies("allergies 2")
+                .uniqueID("uniqueID5")
                 .build();
         MedicalRecord medicalRecord6 = MedicalRecord.builder()
                 .firstName("Marie")
@@ -149,6 +167,15 @@ public class DataSourceTest {
                 .birthdate("01/01/1952")
                 .medications("medications 3")
                 .allergies("allergies 3")
+                .uniqueID("uniqueID6")
+                .build();
+        MedicalRecord medicalRecord7 = MedicalRecord.builder()
+                .firstName("first name 2")
+                .lastName("last name 2")
+                .birthdate("01/01/1958")
+                .medications("medications 7")
+                .allergies("allergies 7")
+                .uniqueID("uniqueID7")
                 .build();
         medicalRecordsMocked.add(medicalRecord1);
         medicalRecordsMocked.add(medicalRecord2);
@@ -156,6 +183,7 @@ public class DataSourceTest {
         medicalRecordsMocked.add(medicalRecord4);
         medicalRecordsMocked.add(medicalRecord5);
         medicalRecordsMocked.add(medicalRecord6);
+        medicalRecordsMocked.add(medicalRecord7);
         return medicalRecordsMocked;
     }
 
