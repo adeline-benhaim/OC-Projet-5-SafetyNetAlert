@@ -162,4 +162,27 @@ public class InformationControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @DisplayName("GET request (/communityEmail?city=<city>) with an exiting city must return an HTTP 200 response")
+    public void testGetListOfEmailByCity() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/communityEmail?city=city"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET request (/communityEmail?city=<city>) with an unknown city must return an HTTP 404 response")
+    public void testGetListOfEmailByUnknownCity() throws Exception {
+
+        //GIVEN
+        given(informationService.findEmailByCity("unknown")).willThrow(new PersonNotFoundException("REST : Get a list of email for city unknown not found "));
+
+        //THEN
+        mockMvc.perform(get("/communityEmail?city=unknown"))
+                .andExpect(status().isNotFound());
+    }
+
 }

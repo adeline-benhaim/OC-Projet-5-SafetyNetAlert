@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.api.model.Firestation;
 import com.safetynet.alerts.api.model.MedicalRecord;
 import com.safetynet.alerts.api.model.Person;
-import com.safetynet.alerts.api.model.dto.PersonAdultChildListDto;
 import lombok.Getter;
 import lombok.Setter;
 

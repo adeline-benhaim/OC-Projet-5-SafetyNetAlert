@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api("API for information operations")
+@Api(description = "API for information operations")
 @RestController
 public class InformationController {
     private static final Logger logger = LoggerFactory.getLogger(InformationController.class);
@@ -127,6 +127,19 @@ public class InformationController {
             return ResponseEntity.ok(personInfoDtos);
         }catch (PersonNotFoundException e) {
             logger.error("REST : Get person info by firstname and lastname error because {} {} is not found", firstName, lastName);
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @ApiOperation("Get list of email of all persons living in the city sought")
+    @GetMapping("/communityEmail")
+    public ResponseEntity<List<String>> getEmailByCity (@RequestParam("city")String city) {
+        logger.info("REST : Get list of email of all persons living in city sought");
+        try {
+            List<String> email = informationService.findEmailByCity(city);
+            return ResponseEntity.ok(email);
+        }catch (PersonNotFoundException e) {
+            logger.error("REST : Get a list of email for city : {}" + " is not found", city);
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }

@@ -18,6 +18,7 @@ public class PersonDaoImpl implements PersonDao {
 
     /**
      * Find all persons with their firstname, lastname, address, city, zip, email
+     *
      * @return list with all persons with their firstname, lastname, address, city, zip, email
      */
     @Override
@@ -27,6 +28,7 @@ public class PersonDaoImpl implements PersonDao {
 
     /**
      * Find a list of persons found by address
+     *
      * @param address for which persons are sought
      * @return a list of persons living at the address sought
      */
@@ -90,6 +92,24 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     /**
+     * Find a list of persons living in the city sought
+     * @param city for which persons are sought
+     * @return a list of persons living at the city sought
+     */
+    @Override
+    public List<Person> findByCity(String city) {
+        List<Person> personList = dataSource.getAllPersons();
+        List<Person> personListByCity = new ArrayList<>();
+        for (Person person : personList) {
+            if (person.getCity().equalsIgnoreCase(city)) {
+                personListByCity.add(person);
+            }
+        }
+        if (personListByCity.isEmpty()) return null;
+        return personListByCity;
+    }
+
+    /**
      * Save a person with their information (firstname, lastname, address, city, zip, email)
      *
      * @param person information (firstname, lastname, address, city, zip, email)
@@ -112,7 +132,7 @@ public class PersonDaoImpl implements PersonDao {
      * Delete a person found by firstname and lastname
      *
      * @param firstName of the person to delete
-     * @param lastName of the person to delete
+     * @param lastName  of the person to delete
      */
     @Override
     public void delete(String firstName, String lastName) {

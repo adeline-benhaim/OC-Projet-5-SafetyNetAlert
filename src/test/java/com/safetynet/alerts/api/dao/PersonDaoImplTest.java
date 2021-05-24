@@ -206,7 +206,7 @@ class PersonDaoImplTest {
         assertNull(personList);
     }
 
-        @Test
+    @Test
     @DisplayName("Find a list of persons found by address")
     void findListPersonsByAddressTest() {
 
@@ -243,6 +243,48 @@ class PersonDaoImplTest {
 
         //WHEN
         List<Person> personList = personDao.findByAddress("unknown address");
+
+        //THEN
+        assertNull(personList);
+    }
+
+    @Test
+    @DisplayName("Find a list of persons found by city")
+    void findListPersonsByCityTest() {
+
+        //GIVEN
+        String city = "city";
+        List<Person> personList = new ArrayList<>();
+        Person person = Person.builder()
+                .firstName("firstname")
+                .lastName("lastname")
+                .city("city").build();
+        personList.add(person);
+        Person person1 = Person.builder()
+                .firstName("firstname1")
+                .lastName("lastname1")
+                .city("city1").build();
+        personList.add(person1);
+        when(dataSource.getAllPersons()).thenReturn(personList);
+
+        //WHEN
+        List<Person> personListTest = personDao.findByCity(city);
+
+        //THEN
+        assertTrue(personListTest.contains(person));
+        assertEquals(1,personListTest.size());
+        assertEquals(personListTest.get(0).getCity(), person.getCity());
+    }
+
+    @Test
+    @DisplayName("Find a list of persons by an unknown city return null")
+    void findListPersonsByUnknownCityTest() {
+
+        //GIVEN
+        when(dataSource.getAllPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
+
+        //WHEN
+        List<Person> personList = personDao.findByCity("unknown city");
 
         //THEN
         assertNull(personList);

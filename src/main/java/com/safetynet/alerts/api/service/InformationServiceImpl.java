@@ -241,4 +241,22 @@ public class InformationServiceImpl implements InformationService {
         throw new PersonNotFoundException("Get person info by firstname and lastname error because " + firstName + " " + lastName + " is not found");
     }
 
+    /**
+     * Find a list of persons living in the city sought
+     * @param city for which persons are sought
+     * @return a list of persons living at the city sought
+     */
+    @Override
+    public List<String> findEmailByCity(String city) {
+        logger.info("Get list of email of all persons living in : {} ", city);
+        List<Person> personList = personDao.findByCity(city);
+        if (personList != null) {
+            return personList
+                    .stream().map(Person::getEmail).collect(Collectors.toList());
+        } else {
+            logger.error("Get a list of email for city : {}" + " is not found", city);
+            throw new PersonNotFoundException("Trying to get a email list for an unknown city");
+        }
+    }
+
 }
