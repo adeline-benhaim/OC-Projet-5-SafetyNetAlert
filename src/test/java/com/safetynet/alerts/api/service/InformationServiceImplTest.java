@@ -161,4 +161,40 @@ public class InformationServiceImplTest {
         //THEN
         assertThrows(PersonNotFoundException.class, () -> informationService.findPersonInfoByFirstnameAndLastname("first name 8","last name 8"));
     }
+
+    @Test
+    @DisplayName("Find a list of email of all persons living in the city sought")
+    void findListOfEmailOfPersonLivingInCitySoughtTest() {
+
+        //GIVEN
+        List<Person> personList = new ArrayList<>();
+        Person person = Person.builder()
+                .email("email")
+                .city("city").build();
+        personList.add(person);
+        Person person1 = Person.builder()
+                .email("email1")
+                .city("city").build();
+        personList.add(person1);
+        when(personDao.findByCity("city")).thenReturn(personList);
+
+        //WHEN
+        List<String> listEmails = informationService.findEmailByCity("city");
+
+        //THEN
+        assertEquals(2, listEmails.size());
+        assertEquals("email", listEmails.get(0));
+        assertEquals("email1", listEmails.get(1));
+    }
+
+    @Test
+    @DisplayName("Find a list of email of all persons by unknown city return not found exception")
+    void findListOfEmailOfPersonByUnknownCityTest() {
+
+        //WHEN
+        when(personDao.findByCity("city")).thenReturn(null);
+
+        //THEN
+        assertThrows(PersonNotFoundException.class, () -> informationService.findEmailByCity("city"));
+    }
 }

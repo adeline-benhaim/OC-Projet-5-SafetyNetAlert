@@ -61,4 +61,11 @@ public interface InformationService {
      * @return person info with name, address, age, email medications and allergies
      */
     List<PersonInfoDto> findPersonInfoByFirstnameAndLastname(String firstName, String lastName);
+
+    /**
+     * Find a list of persons living in the city sought
+     * @param city for which persons are sought
+     * @return a list of persons living at the city sought
+     */
+    List<String> findEmailByCity(String city);
 }

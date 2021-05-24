@@ -191,4 +191,27 @@ public class InformationControllerIntegrationTest {
         mockMvc.perform(get("/personInfo?firstName=Unknown&lastName=Unknown"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @DisplayName("GET request (/communityEmail?city=<city>) with an exiting city must return an HTTP 200 response")
+    public void testGetListOfEmailByCity() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/communityEmail?city=Culver"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]", is("jaboyd@email.com")));
+    }
+
+    @Test
+    @DisplayName("GET request (/communityEmail?city=<city>) with an unknown city must return an HTTP 404 response")
+    public void testGetListOfEmailByUnknownCity() throws Exception {
+
+        //GIVEN
+
+        //THEN
+        mockMvc.perform(get("/communityEmail?city=unknown"))
+                .andExpect(status().isNotFound());
+    }
 }

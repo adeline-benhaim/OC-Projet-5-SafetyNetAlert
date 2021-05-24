@@ -37,6 +37,13 @@ public interface PersonDao {
     Person findByFirstNameAndLastName(String firstName, String lastName);
 
     /**
+     * Find a list of persons living in the city sought
+     * @param city for which persons are sought
+     * @return a list of persons living at the city sought
+     */
+    List<Person> findByCity(String city);
+
+    /**
      * Save a person with their information (firstname, lastname, address, city, zip, email)
      * @param person information (firstname, lastname, address, city, zip, email)
      * @return information of the saved person

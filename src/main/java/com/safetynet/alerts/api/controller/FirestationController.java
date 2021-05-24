@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api("API for CRUD operations for firestations")
+@Api(description = "API for CRUD operations for firestations")
 @RestController
 public class FirestationController {
     private static final Logger logger = LoggerFactory.getLogger(FirestationController.class);
