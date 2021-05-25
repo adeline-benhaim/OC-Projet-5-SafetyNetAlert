@@ -55,7 +55,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {
         logger.info("Update medical record for : {}" + " " + "{} ", medicalRecord.getFirstName(), medicalRecord.getLastName());
         MedicalRecord currentMedicalRecord = medicalRecordDao.findByFirstNameAndLastName(medicalRecord.getFirstName(), medicalRecord.getLastName());
-        if (currentMedicalRecord == null) throw new MedicalRecordNotFoundException("Trying to update non existing medical record");
+        if (currentMedicalRecord == null)
+            throw new MedicalRecordNotFoundException("Trying to update non existing medical record");
         medicalRecordDao.save(medicalRecord);
         return medicalRecord;
     }
@@ -82,7 +83,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
      * Delete a medical record for a person found by firstname and lastname
      *
      * @param firstName of medicalRecord to delete
-     * @param lastName of medicalRecord to delete
+     * @param lastName  of medicalRecord to delete
      */
     @Override
     public void deleteMedicalRecord(String firstName, String lastName) {

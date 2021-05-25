@@ -121,22 +121,6 @@ public class FirestationControllerTest {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    @DisplayName("PUT request (/firestation) with a unknown firestation must return an HTTP 404 response")
-//    public void testPutUnknownFirestation() throws Exception {
-//
-//        //GIVEN
-//        given(firestationService.updateFirestation(firestation)).willThrow(new FirestationNotFoundException("Trying to update non existing firestation"));
-//
-//        //THEN
-//        mockMvc.perform( MockMvcRequestBuilders
-//                .put("/firestation")
-//                .content(asJsonString(firestation))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNotFound());
-//    }
-
     @Test
     @DisplayName("DELETE request (/firestation) by address must return an HTTP 200 response")
     public void testDeleteFirestationByAddress() throws Exception {

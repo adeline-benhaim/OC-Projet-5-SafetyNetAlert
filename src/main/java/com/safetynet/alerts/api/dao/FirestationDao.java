@@ -8,12 +8,14 @@ public interface FirestationDao {
 
     /**
      * Find all firestations
+     *
      * @return list with all firestations
      */
     List<Firestation> findFirestations();
 
     /**
      * Find firestation number by address
+     *
      * @param address for which the firestation number is sought
      * @return the number of firestation associate
      */
@@ -21,6 +23,7 @@ public interface FirestationDao {
 
     /**
      * Find a list of firestation found by station number
+     *
      * @param stationNumber for which the firestation number is sought
      * @return a list of firestation found by station number
      */
@@ -28,6 +31,7 @@ public interface FirestationDao {
 
     /**
      * Save firestation
+     *
      * @param firestation to save
      * @return firestation saved
      */
@@ -36,6 +40,7 @@ public interface FirestationDao {
 
     /**
      * Delete firestation by address or by station number
+     *
      * @param address of firestation to delete
      */
     void delete(String address);

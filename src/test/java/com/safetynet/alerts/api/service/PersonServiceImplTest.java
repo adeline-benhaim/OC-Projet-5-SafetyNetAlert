@@ -1,8 +1,6 @@
 package com.safetynet.alerts.api.service;
 
 import com.safetynet.alerts.api.config.DataSourceTest;
-import com.safetynet.alerts.api.dao.FirestationDao;
-import com.safetynet.alerts.api.dao.MedicalRecordDao;
 import com.safetynet.alerts.api.dao.PersonDao;
 import com.safetynet.alerts.api.exceptions.PersonAlreadyExistException;
 import com.safetynet.alerts.api.exceptions.PersonNotFoundException;
@@ -107,7 +105,7 @@ public class PersonServiceImplTest {
                 .firstName("firstname 1")
                 .lastName("lastname 1")
                 .build();
-        when(personDao.findByFirstNameAndLastName(personPresent.getFirstName(),personPresent.getLastName())).thenReturn(dataSourceTest.getAllPersonMocked().get(0));
+        when(personDao.findByFirstNameAndLastName(personPresent.getFirstName(), personPresent.getLastName())).thenReturn(dataSourceTest.getAllPersonMocked().get(0));
 
         // WHEN
         personService.updatePerson(personPresent);

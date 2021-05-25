@@ -105,7 +105,7 @@ public class MedicalRecordServiceImplTest {
                 .firstName("first name 5")
                 .lastName("last name 5")
                 .build();
-        when(medicalRecordDao.findByFirstNameAndLastName(presentMedicalRecord.getFirstName(),presentMedicalRecord.getLastName())).thenReturn(dataSourceTest.getAllMedicalRecordMocked().get(0));
+        when(medicalRecordDao.findByFirstNameAndLastName(presentMedicalRecord.getFirstName(), presentMedicalRecord.getLastName())).thenReturn(dataSourceTest.getAllMedicalRecordMocked().get(0));
 
         // WHEN
         medicalRecordService.updateMedicalRecord(presentMedicalRecord);

@@ -155,7 +155,7 @@ public class InformationControllerTest {
     public void testGetUnknownPersonInfoByFirstnameAndLastname() throws Exception {
 
         //GIVEN
-        given(informationService.findPersonInfoByFirstnameAndLastname("Unknown","Unknown")).willThrow(new PersonNotFoundException("REST : Get person info by firstname and lastname error because person is not found"));
+        given(informationService.findPersonInfoByFirstnameAndLastname("Unknown", "Unknown")).willThrow(new PersonNotFoundException("REST : Get person info by firstname and lastname error because person is not found"));
 
         //THEN
         mockMvc.perform(get("/personInfo?firstName=Unknown&lastName=Unknown"))

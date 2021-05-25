@@ -58,7 +58,7 @@ public class MedicalRecordControllerTest {
     public void testGetMedicalRecordNotFound() throws Exception {
 
         //GIVEN
-        given(medicalRecordService.findMedicalRecordByFirstNameAndLastName("firstname 8","lastname 8")).willThrow(new MedicalRecordNotFoundException("Get medical record error because this person is not found"));
+        given(medicalRecordService.findMedicalRecordByFirstNameAndLastName("firstname 8", "lastname 8")).willThrow(new MedicalRecordNotFoundException("Get medical record error because this person is not found"));
 
         //THEN
         mockMvc.perform(get("/medicalRecord/firstname 8/lastname 8"))
@@ -77,7 +77,7 @@ public class MedicalRecordControllerTest {
         when(medicalRecordService.createNewMedicalRecord(medicalRecord)).thenReturn(null);
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .post("/medicalRecord")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ public class MedicalRecordControllerTest {
         given(medicalRecordService.createNewMedicalRecord(medicalRecord)).willThrow(new MedicalRecordAlreadyExistException("Create medical record error because medical record already exist"));
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .post("/medicalRecord")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -112,29 +112,13 @@ public class MedicalRecordControllerTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .put("/medicalRecord")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
-//    @Test
-//    @DisplayName("PUT request (/medicalRecord) with unknown medical record must return an HTTP 404 response")
-//    public void testPutUnknownMedicalRecord() throws Exception {
-//
-//        //GIVEN
-//        given(medicalRecordService.updateMedicalRecord(medicalRecord)).willThrow(new MedicalRecordNotFoundException("Trying to update non existing medical record"));
-//
-//        //THEN
-//        mockMvc.perform( MockMvcRequestBuilders
-//                .put("/medicalRecord")
-//                .content(asJsonString(medicalRecord))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNotFound());
-//    }
 
     @Test
     @DisplayName("DELETE request (/medicalRecord) must return an HTTP 200 response")
@@ -147,7 +131,7 @@ public class MedicalRecordControllerTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .delete("/medicalRecord/firstname/lastname")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON)

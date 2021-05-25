@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(description = "API for CRUD operations for firestations")
+@Api("API for CRUD operations for firestations")
 @RestController
 public class FirestationController {
     private static final Logger logger = LoggerFactory.getLogger(FirestationController.class);
@@ -26,7 +26,7 @@ public class FirestationController {
 
     @ApiOperation("Get the list of all firestations")
     @GetMapping("/firestations")
-    public List<Firestation> getFirestations () {
+    public List<Firestation> getFirestations() {
         logger.info("REST : Get all firestations");
         return firestationService.getAllFirestations();
     }
@@ -34,9 +34,9 @@ public class FirestationController {
 
     @ApiOperation("Get a firestation find by address")
     @GetMapping("firestation/{address}")
-    public ResponseEntity<Firestation> getFirestationsByAddress (@PathVariable("address") String address) {
+    public ResponseEntity<Firestation> getFirestationsByAddress(@PathVariable("address") String address) {
         logger.info("REST : Get firestation by address : {}", address);
-        try{
+        try {
             Firestation firestation = firestationService.findFirestationByAddress(address);
             return ResponseEntity.ok(firestation);
         } catch (FirestationNotFoundException e) {

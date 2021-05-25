@@ -38,12 +38,12 @@ public class Person {
 
 
     public void calculateAge(String birthdate) {
-            Locale.setDefault(Locale.FRANCE);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-            LocalDate birthdateConvert = LocalDate.parse(birthdate, formatter);
-            LocalDate currentDate = LocalDate.now();
-            int age = Period.between(birthdateConvert, currentDate).getYears();
-            this.setAge(age);
+        Locale.setDefault(Locale.FRANCE);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate birthdateConvert = LocalDate.parse(birthdate, formatter);
+        LocalDate currentDate = LocalDate.now();
+        int age = Period.between(birthdateConvert, currentDate).getYears();
+        this.setAge(age);
     }
 
 }

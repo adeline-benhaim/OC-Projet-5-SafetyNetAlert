@@ -230,7 +230,7 @@ class PersonDaoImplTest {
 
         //THEN
         assertTrue(personListTest.contains(person));
-        assertEquals(1,personListTest.size());
+        assertEquals(1, personListTest.size());
         assertEquals(personListTest.get(0).getAddress(), person.getAddress());
     }
 
@@ -272,7 +272,7 @@ class PersonDaoImplTest {
 
         //THEN
         assertTrue(personListTest.contains(person));
-        assertEquals(1,personListTest.size());
+        assertEquals(1, personListTest.size());
         assertEquals(personListTest.get(0).getCity(), person.getCity());
     }
 

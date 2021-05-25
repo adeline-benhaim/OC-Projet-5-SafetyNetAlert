@@ -37,8 +37,7 @@ public class InformationServiceImpl implements InformationService {
      * @param personList a list of persons included adults and children
      * @return a list of adults and a list of children
      */
-    @Override
-    public PersonAdultChildListDto findChildrenListAndAdultList(List<Person> personList) {
+    PersonAdultChildListDto findChildrenListAndAdultList(List<Person> personList) {
         logger.info("Get a list of children and a list of adults");
         List<Person> childrenList = new ArrayList<>();
         List<Person> adultList = new ArrayList<>();
@@ -205,8 +204,9 @@ public class InformationServiceImpl implements InformationService {
 
     /**
      * Find a person info or a list of person info if several persons have the same name
+     *
      * @param firstName of person info sought
-     * @param lastName of person info sought
+     * @param lastName  of person info sought
      * @return person info with name, address, age, email medications and allergies
      */
     @Override
@@ -243,6 +243,7 @@ public class InformationServiceImpl implements InformationService {
 
     /**
      * Find a list of persons living in the city sought
+     *
      * @param city for which persons are sought
      * @return a list of persons living at the city sought
      */

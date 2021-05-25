@@ -18,7 +18,7 @@ public class FirestationTest {
         String stationNumber = "stationNumber";
 
         //WHEN
-        firestation = new Firestation(null,"stationNumber");
+        firestation = new Firestation(null, "stationNumber");
 
         //THEN
         assertThat(stationNumber).isEqualTo(firestation.getStationNumber());
@@ -32,7 +32,7 @@ public class FirestationTest {
         String address = "address";
 
         //WHEN
-        firestation = new Firestation("address",null);
+        firestation = new Firestation("address", null);
 
         //THEN
         assertThat(address).isEqualTo(firestation.getAddress());
@@ -43,7 +43,7 @@ public class FirestationTest {
     void testFirestationSet() {
 
         //GIVEN
-        firestation = new Firestation(null,null);
+        firestation = new Firestation(null, null);
 
         //WHEN
         firestation.setAddress("address");

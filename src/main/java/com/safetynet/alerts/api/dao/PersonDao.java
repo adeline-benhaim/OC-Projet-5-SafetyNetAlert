@@ -15,6 +15,7 @@ public interface PersonDao {
 
     /**
      * Find a list of persons found by address
+     *
      * @param address for which persons are sought
      * @return a list of persons living at the address sought
      */
@@ -30,14 +31,16 @@ public interface PersonDao {
 
     /**
      * Find person by firstname and lastname
+     *
      * @param firstName of the wanted person
-     * @param lastName of the wanted person
+     * @param lastName  of the wanted person
      * @return the information of the person sought (firstname, lastname, address, city, zip, email)
      */
     Person findByFirstNameAndLastName(String firstName, String lastName);
 
     /**
      * Find a list of persons living in the city sought
+     *
      * @param city for which persons are sought
      * @return a list of persons living at the city sought
      */
@@ -45,6 +48,7 @@ public interface PersonDao {
 
     /**
      * Save a person with their information (firstname, lastname, address, city, zip, email)
+     *
      * @param person information (firstname, lastname, address, city, zip, email)
      * @return information of the saved person
      */
@@ -52,8 +56,9 @@ public interface PersonDao {
 
     /**
      * Delete a person found by firstname and lastname
+     *
      * @param firstName of the person to delete
-     * @param lastName of the person to delete
+     * @param lastName  of the person to delete
      */
     void delete(String firstName, String lastName);
 }

@@ -106,7 +106,7 @@ public class FirestationServiceImplTest {
         when(firestationDao.findByAddress(firestation.getAddress())).thenReturn(dataSourceTest.getAllFirestationMocked().get(0));
 
         //WHEN
-       firestationService.updateFirestation(firestation);
+        firestationService.updateFirestation(firestation);
 
         //THEN
         verify(firestationDao, Mockito.times(1)).save(firestation);

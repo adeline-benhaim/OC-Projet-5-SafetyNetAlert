@@ -122,22 +122,6 @@ public class PersonControllerTest {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    @DisplayName("PUT request (/person) with a unknown person must return an HTTP 404 response")
-//    public void testPutAUnknownPerson() throws Exception {
-//
-//        //GIVEN
-//        given(personService.updatePerson(person)).willThrow(new PersonNotFoundException("Trying to update non existing person"));
-//
-//        //THEN
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .put("/person")
-//                .content(asJsonString(person))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNotFound());
-//    }
-
     @Test
     @DisplayName("DELETE request (/person/{firstName}/{lastName}) must return an HTTP 200 response")
     public void testDeletePerson() throws Exception {

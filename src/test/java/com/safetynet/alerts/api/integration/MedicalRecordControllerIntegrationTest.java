@@ -81,7 +81,7 @@ public class MedicalRecordControllerIntegrationTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .post("/medicalRecord")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -102,7 +102,7 @@ public class MedicalRecordControllerIntegrationTest {
 
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .post("/medicalRecord")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -122,7 +122,7 @@ public class MedicalRecordControllerIntegrationTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .put("/medicalRecord")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -143,7 +143,7 @@ public class MedicalRecordControllerIntegrationTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .put("/medicalRecord")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +158,7 @@ public class MedicalRecordControllerIntegrationTest {
         //GIVEN
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .delete("/medicalRecord/John/Boyd")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

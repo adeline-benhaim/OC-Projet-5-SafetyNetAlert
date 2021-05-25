@@ -43,6 +43,7 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 
     /**
      * Find a medical record by ID
+     *
      * @param uniqueID of the person concerned
      * @return the medical record of the person concerned
      */
@@ -80,11 +81,11 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
      * Delete a medical record found by firstname and lastname
      *
      * @param firstName of medicalRecord to delete
-     * @param lastName of medicalRecord to delete
+     * @param lastName  of medicalRecord to delete
      */
     @Override
     public void delete(String firstName, String lastName) {
-    List<MedicalRecord> medicalRecords = dataSource.getAllMedicalRecords();
-    medicalRecords.removeIf(elem -> elem.getFirstName().equalsIgnoreCase(firstName) && elem.getLastName().equalsIgnoreCase(lastName));
+        List<MedicalRecord> medicalRecords = dataSource.getAllMedicalRecords();
+        medicalRecords.removeIf(elem -> elem.getFirstName().equalsIgnoreCase(firstName) && elem.getLastName().equalsIgnoreCase(lastName));
     }
 }

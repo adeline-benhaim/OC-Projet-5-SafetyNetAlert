@@ -93,6 +93,7 @@ public class PersonDaoImpl implements PersonDao {
 
     /**
      * Find a list of persons living in the city sought
+     *
      * @param city for which persons are sought
      * @return a list of persons living at the city sought
      */

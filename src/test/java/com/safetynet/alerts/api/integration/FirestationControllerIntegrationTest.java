@@ -36,7 +36,7 @@ public class FirestationControllerIntegrationTest {
     }
 
     @AfterEach
-    public void tearDown(){
+    public void tearDown() {
 
     }
 
@@ -86,7 +86,7 @@ public class FirestationControllerIntegrationTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .post("/firestation")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +107,7 @@ public class FirestationControllerIntegrationTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .post("/firestation")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -126,7 +126,7 @@ public class FirestationControllerIntegrationTest {
                 .build();
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .put("/firestation")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +145,7 @@ public class FirestationControllerIntegrationTest {
                 .stationNumber("newNumber")
                 .build();
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .put("/firestation")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -160,7 +160,7 @@ public class FirestationControllerIntegrationTest {
         //GIVEN
 
         //THEN
-        mockMvc.perform( MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                 .delete("/firestation/834 Binoc Ave")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

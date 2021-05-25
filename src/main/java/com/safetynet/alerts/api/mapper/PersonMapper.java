@@ -44,7 +44,7 @@ public class PersonMapper {
 
     public static PersonInfoDto convertToPersonInfoDto(Person person) {
         return PersonInfoDto.builder()
-                .name(person.getFirstName()+ " " + person.getLastName())
+                .name(person.getFirstName() + " " + person.getLastName())
                 .address(person.getAddress() + " " + person.getZip() + " " + person.getCity())
                 .age(person.getAge())
                 .email(person.getEmail())

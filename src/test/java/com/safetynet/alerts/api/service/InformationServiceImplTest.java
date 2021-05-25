@@ -159,7 +159,7 @@ public class InformationServiceImplTest {
         when(personDao.findPersons()).thenReturn(dataSourceTest.getAllPersonMocked());
 
         //THEN
-        assertThrows(PersonNotFoundException.class, () -> informationService.findPersonInfoByFirstnameAndLastname("first name 8","last name 8"));
+        assertThrows(PersonNotFoundException.class, () -> informationService.findPersonInfoByFirstnameAndLastname("first name 8", "last name 8"));
     }
 
     @Test
