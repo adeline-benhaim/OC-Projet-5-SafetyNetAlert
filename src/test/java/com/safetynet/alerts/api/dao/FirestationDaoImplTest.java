@@ -14,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FirestationDaoImplTest {
@@ -49,38 +48,6 @@ public class FirestationDaoImplTest {
     }
 
     @Test
-    @DisplayName("Save a new firestation which does not exist in the data source")
-    void saveNewFirestationTest() {
-
-        // GIVEN
-        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
-
-        // WHEN
-        Firestation firestation = new Firestation("address", "number");
-        Firestation createdFirestation = firestationDao.save(firestation);
-
-        // THEN
-        assertEquals("address", createdFirestation.getAddress());
-        assertEquals("number", createdFirestation.getStationNumber());
-    }
-
-    @Test
-    @DisplayName("Save a firestation already existing in the data source")
-    void saveFirestationAlreadyExistingTest() {
-
-        // GIVEN
-        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
-
-        // WHEN
-        Firestation firestation = new Firestation("address 1", "number 5");
-        Firestation createdFirestation = firestationDao.save(firestation);
-
-        // THEN
-        assertEquals("address 1", createdFirestation.getAddress());
-        assertEquals("number 5", createdFirestation.getStationNumber());
-    }
-
-    @Test
     @DisplayName("Get an existing firestation found by address")
     void findExistingFirestationFoundByAddressTest() {
 
@@ -106,24 +73,101 @@ public class FirestationDaoImplTest {
 
         // THEN
         assertNull(firestation);
-        for (int i = 0; i < dataSourceTest.getFirestationsMocked().size(); i++)
-            System.out.println(dataSourceTest.getFirestationsMocked().get(i));
     }
 
-//    @Test
-//    @DisplayName("Delete a firestation found by address")
-//    void deleteFirestationFoundByAddressTest() {
-//
-//        // GIVEN
-//        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
-//        Firestation firestationToDelete = new Firestation("address 2", "number 2");
-//
-//        // WHEN
-//        firestationDao.delete(dataSourceTest.getAllFirestationMocked().get(0));
-//
-//        // THEN
-//        assertEquals(dataSourceTest.getFirestationsMocked().get(0).getAddress(), firestationToDelete.getAddress());
-////        for(int i = 0 ; i < dataSourceTest.getFirestationsMocked().size(); i++)
-////            System.out.println(dataSourceTest.getFirestationsMocked().get(i));
-//    }
+    @Test
+    @DisplayName("Get a list of firestation found by station number")
+    void findListOfFirestationFoundByStationNumberTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
+
+        // WHEN
+        List<Firestation> firestation = firestationDao.findByStationNumber("number 1");
+
+        // THEN
+        assertTrue(firestation.contains(dataSourceTest.getFirestationsMocked().get(0)));
+    }
+
+    @Test
+    @DisplayName("Get an list of firestation found by unknown station number return null")
+    void findListOfFirestationFoundByUnknownStationNumberTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
+
+        // WHEN
+        List<Firestation> firestation = firestationDao.findByStationNumber("5");
+
+        // THEN
+        assertNull(firestation);
+    }
+
+    @Test
+    @DisplayName("Save a new firestation which does not exist in the data source")
+    void saveNewFirestationTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
+        int sizeListBeforeSave = dataSourceTest.getFirestationsMocked().size();
+
+
+        // WHEN
+        Firestation firestation = Firestation.builder()
+                .address("newAddress")
+                .stationNumber("newNumber")
+                .build();
+        Firestation saveFirestation = firestationDao.save(firestation);
+        int sizeListAfterSave = dataSourceTest.getFirestationsMocked().size();
+
+        // THEN
+        Firestation firestationTest = dataSourceTest.getFirestationsMocked().get(4);
+        assertEquals(saveFirestation.getAddress(), firestationTest.getAddress());
+        assertEquals(saveFirestation.getStationNumber(), firestationTest.getStationNumber());
+        assertTrue(sizeListBeforeSave < sizeListAfterSave);
+        assertEquals(sizeListBeforeSave + 1, sizeListAfterSave);
+    }
+
+    @Test
+    @DisplayName("Save a firestation already existing in the data source")
+    void saveFirestationAlreadyExistingTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
+        int sizeListBeforeSave = dataSourceTest.getFirestationsMocked().size();
+
+
+        // WHEN
+        Firestation firestation = Firestation.builder()
+                .address("address 1")
+                .stationNumber("number 5")
+                .build();
+        Firestation saveFirestation = firestationDao.save(firestation);
+        int sizeListAfterSave = dataSourceTest.getFirestationsMocked().size();
+
+        // THEN
+        Firestation firestationTest = dataSourceTest.getFirestationsMocked().get(0);
+        assertEquals(saveFirestation.getAddress(), firestationTest.getAddress());
+        assertEquals("number 5", firestationTest.getStationNumber());
+        assertEquals(sizeListBeforeSave, sizeListAfterSave);
+    }
+
+
+    @Test
+    @DisplayName("Delete a firestation found by address")
+    void deleteFirestationFoundByAddressTest() {
+
+        // GIVEN
+        Mockito.when(dataSource.getAllFirestation()).thenReturn(dataSourceTest.getAllFirestationMocked());
+        int sizeListBeforeDelete = dataSourceTest.getFirestationsMocked().size();
+
+        // WHEN
+        Firestation firestationToDelete = dataSourceTest.getFirestationsMocked().get(0);
+        firestationDao.delete(firestationToDelete.getAddress());
+        int sizeListAfterDelete = dataSourceTest.getFirestationsMocked().size();
+
+        // THEN
+        assertTrue(sizeListBeforeDelete > sizeListAfterDelete);
+        assertEquals(sizeListBeforeDelete - 1, sizeListAfterDelete);
+    }
 }

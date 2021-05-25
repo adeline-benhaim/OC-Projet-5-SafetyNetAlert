@@ -16,7 +16,8 @@ public class FirestationServiceImpl implements FirestationService {
     private static final Logger logger = LoggerFactory.getLogger(FirestationServiceImpl.class);
 
     @Autowired
-    FirestationDao firestationDao;
+    private FirestationDao firestationDao;
+
 
     /**
      * Find all firestations
@@ -54,8 +55,12 @@ public class FirestationServiceImpl implements FirestationService {
     public Firestation updateFirestation(Firestation firestation) {
         logger.info("Update number of firestation  with address : {}" + " ", firestation.getAddress());
         Firestation currentFirestation = firestationDao.findByAddress(firestation.getAddress());
-        if (currentFirestation == null) throw new FirestationNotFoundException("Trying to update non existing firestation for given address");
-        firestationDao.save(firestation);
+        if (currentFirestation == null) {
+            logger.error("Trying to update non existing firestation for given address");
+            throw new FirestationNotFoundException("Trying to update non existing firestation for given address");
+        } else {
+            firestationDao.save(firestation);
+        }
         return firestation;
     }
 
@@ -70,12 +75,9 @@ public class FirestationServiceImpl implements FirestationService {
     public Firestation createNewFirestation(Firestation firestation) {
         logger.info("Create new mapping firestation/address : {}" + " " + "{} ", firestation.getStationNumber(), firestation.getAddress());
         Firestation newFirestation = firestationDao.findByAddress(firestation.getAddress());
-        if (newFirestation == null) {
-            return firestationDao.save(firestation);
-        } else {
-            logger.error("Create new mapping error because address : {} already exist", firestation.getAddress());
-            throw new FirestationAlreadyExistException("Create new mapping error because address " + firestation.getAddress() + " already exist");
-        }
+        if (newFirestation == null) return firestationDao.save(firestation);
+        logger.error("Create new mapping error because address : {} already exist", firestation.getAddress());
+        throw new FirestationAlreadyExistException("Create new mapping error because address " + firestation.getAddress() + " already exist");
     }
 
     /**
@@ -84,9 +86,8 @@ public class FirestationServiceImpl implements FirestationService {
      * @param address of firestation to delete
      */
     @Override
-    public void deleteFirestationByAddress(String address) {
+    public void deleteFirestation(String address) {
         logger.info("Delete firestation address: {} ", address);
         firestationDao.delete(address);
     }
-
 }

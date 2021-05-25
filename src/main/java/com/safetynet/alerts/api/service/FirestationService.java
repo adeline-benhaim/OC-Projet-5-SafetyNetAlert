@@ -8,6 +8,7 @@ public interface FirestationService {
 
     /**
      * Find all firestations
+     *
      * @return list with all firestations
      */
     List<Firestation> getAllFirestations();
@@ -18,10 +19,11 @@ public interface FirestationService {
      * @param address for which the firestation number is sought
      * @return the number of firestation associate
      */
-   Firestation findFirestationByAddress(String address);
+    Firestation findFirestationByAddress(String address);
 
     /**
      * Update a firestation
+     *
      * @param firestation number need to update by address
      * @return firestation updated
      */
@@ -30,6 +32,7 @@ public interface FirestationService {
 
     /**
      * Create firestation
+     *
      * @param firestation to create
      * @return firestation created
      */
@@ -37,8 +40,8 @@ public interface FirestationService {
 
     /**
      * Delete firestation by address
+     *
      * @param address of firestation to delete
      */
-    void deleteFirestationByAddress(String address);
-
+    void deleteFirestation(String address);
 }

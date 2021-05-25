@@ -11,8 +11,10 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 @Service
 public class DataSource {
@@ -20,13 +22,18 @@ public class DataSource {
     public List<Person> persons = new ArrayList<>();
 
     public List<Person> getAllPersons() {
+        for (Person person : persons) {
+            String uniqueID = UUID.randomUUID().toString();
+            person.setUniqueID(uniqueID);
+        }
         return persons;
     }
 
     public List<Firestation> firestations = new ArrayList<>();
 
     public List<Firestation> getAllFirestation() {
-        return firestations;
+        List firestationsWithoutDuplicate = firestations.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(Firestation::getAddress))), ArrayList::new));
+        return new ArrayList<>(firestationsWithoutDuplicate);
     }
 
     public List<MedicalRecord> medicalRecords = new ArrayList<>();
@@ -42,6 +49,7 @@ public class DataSource {
         byte[] bytesFile = Files.readAllBytes(new File(filePath).toPath());
         JsonIterator iter = JsonIterator.parse(bytesFile);
         Any any = iter.readAny();
+
         Any personAny = any.get("persons");
         personAny.forEach(a -> persons.add(Person.builder()
                 .firstName(a.get("firstName").toString())

@@ -10,10 +10,5 @@ import lombok.Setter;
 public class Firestation {
     private String address;
     private String stationNumber;
-
-    public Firestation(String address, String stationNumber) {
-        this.address = address;
-        this.stationNumber = stationNumber;
-    }
 }
 

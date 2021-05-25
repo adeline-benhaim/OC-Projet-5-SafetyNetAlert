@@ -17,7 +17,9 @@ public class MedicalRecordTest {
         String firstName = "firstName";
 
         //WHEN
-        medicalRecord = new MedicalRecord("firstName", null, null, null, null);
+        medicalRecord = MedicalRecord.builder()
+                .firstName("firstName")
+                .build();
 
         //THEN
         assertThat(firstName).isEqualTo(medicalRecord.getFirstName());
@@ -31,7 +33,9 @@ public class MedicalRecordTest {
         String lastName = "lastName";
 
         //WHEN
-        medicalRecord = new MedicalRecord(null, "lastName", null, null, null);
+        medicalRecord = MedicalRecord.builder()
+                .lastName("lastName")
+                .build();
 
         //THEN
         assertThat(lastName).isEqualTo(medicalRecord.getLastName());
@@ -45,7 +49,9 @@ public class MedicalRecordTest {
         String birthdate = "birthdate";
 
         //WHEN
-        medicalRecord = new MedicalRecord(null, null, "birthdate", null, null);
+        medicalRecord = MedicalRecord.builder()
+                .birthdate("birthdate")
+                .build();
 
         //THEN
         assertThat(birthdate).isEqualTo(medicalRecord.getBirthdate());
@@ -59,7 +65,9 @@ public class MedicalRecordTest {
         String medications = "medications";
 
         //WHEN
-        medicalRecord = new MedicalRecord(null, null, null, "medications", null);
+        medicalRecord = MedicalRecord.builder()
+                .medications("medications")
+                .build();
 
         //THEN
         assertThat(medications).isEqualTo(medicalRecord.getMedications());
@@ -73,10 +81,28 @@ public class MedicalRecordTest {
         String allergies = "allergies";
 
         //WHEN
-        medicalRecord = new MedicalRecord(null, null, null, null, "allergies");
+        medicalRecord = MedicalRecord.builder()
+                .allergies("allergies")
+                .build();
 
         //THEN
         assertThat(allergies).isEqualTo(medicalRecord.getAllergies());
+    }
+
+    @Test
+    @DisplayName("Get uniqueID of a medical record")
+    void testMedicalRecordGetUniqueID() {
+
+        //GIVEN
+        String uniqueID = "uniqueID";
+
+        //WHEN
+        medicalRecord = MedicalRecord.builder()
+                .uniqueID("uniqueID")
+                .build();
+
+        //THEN
+        assertThat(uniqueID).isEqualTo(medicalRecord.getUniqueID());
     }
 
     @Test
@@ -84,7 +110,13 @@ public class MedicalRecordTest {
     void testMedicalRecordSet() {
 
         //GIVEN
-        medicalRecord = new MedicalRecord(null, null, null, null, null);
+        medicalRecord = MedicalRecord.builder()
+                .firstName(null)
+                .lastName(null)
+                .birthdate(null)
+                .medications(null)
+                .allergies(null)
+                .build();
 
         //WHEN
         medicalRecord.setFirstName("firstName");
@@ -92,6 +124,7 @@ public class MedicalRecordTest {
         medicalRecord.setBirthdate("birthdate");
         medicalRecord.setMedications("medications");
         medicalRecord.setAllergies("allergies");
+        medicalRecord.setUniqueID("uniqueID");
 
         //THEN
         assertThat(medicalRecord.getFirstName()).isEqualTo("firstName");
@@ -99,5 +132,6 @@ public class MedicalRecordTest {
         assertThat(medicalRecord.getBirthdate()).isEqualTo("birthdate");
         assertThat(medicalRecord.getMedications()).isEqualTo("medications");
         assertThat(medicalRecord.getAllergies()).isEqualTo("allergies");
+        assertThat(medicalRecord.getUniqueID()).isEqualTo("uniqueID");
     }
 }

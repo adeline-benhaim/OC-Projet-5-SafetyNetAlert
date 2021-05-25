@@ -1,4 +1,4 @@
-package com.safetynet.alerts.api.model;
+package com.safetynet.alerts.api.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
@@ -8,12 +8,15 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class MedicalRecord {
+public class PersonDto {
     private String firstName;
     private String lastName;
-    private String birthdate;
-    private String medications;
-    private String allergies;
+    private String address;
+    private String phone;
     @JsonIgnore
-    private String uniqueID;
+    private int age;
+
 }
+
+
+

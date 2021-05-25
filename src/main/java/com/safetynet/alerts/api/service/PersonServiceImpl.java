@@ -18,6 +18,7 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     private PersonDao personDao;
 
+
     /**
      * Find all persons
      *
@@ -33,7 +34,7 @@ public class PersonServiceImpl implements PersonService {
      * Find person by firstname and lastname
      *
      * @param firstName of the wanted person
-     * @param lastName of the wanted person
+     * @param lastName  of the wanted person
      * @return the information of the person sought
      */
     @Override
@@ -54,7 +55,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person updatePerson(Person person) {
         logger.info("Update person : {}" + " " + "{} ", person.getFirstName(), person.getLastName());
-        Person currentPerson = personDao.findByFirstNameAndLastName(person.firstName, person.lastName);
+        Person currentPerson = personDao.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
         if (currentPerson == null) throw new PersonNotFoundException("Trying to update non existing person");
         personDao.save(person);
         return person;
@@ -82,7 +83,7 @@ public class PersonServiceImpl implements PersonService {
      * Delete a person found by firstname and lastname
      *
      * @param firstName of the person to delete
-     * @param lastName of the person to delete
+     * @param lastName  of the person to delete
      * @return null
      */
     @Override
@@ -90,5 +91,6 @@ public class PersonServiceImpl implements PersonService {
         logger.info("Delete person : {}" + " " + "{} ", firstName, lastName);
         personDao.delete(firstName, lastName);
     }
+
 }
 
